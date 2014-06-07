@@ -33,6 +33,10 @@ namespace Biggy.Postgres {
           if (this.FullTextFields.Length > 0) {
             fullTextColumn = ", search tsvector";
           }
+          string lazyLoadingColumns = "";
+          if (this.LazyLoadingFields.Length > 0) {
+              lazyLoadingColumns = string.Format(", {0} json", string.Join(" json, ", this.LazyLoadingFields));
+          }
           string keyDefStub = "{0} {1} not null";
           foreach (var pk in Model.TableMapping.PrimaryKeyMapping) {
             string integerKeyType = "integer";
@@ -45,7 +49,7 @@ namespace Biggy.Postgres {
           }
           string keyColumnsStatement = string.Join(",", keyColumnDefs.ToArray());
           string pkColumns = string.Join(",", keyColumnNames.ToArray());
-          sql = string.Format("CREATE TABLE {0} ({1}, body json not null {2}, PRIMARY KEY ({3}));", this.TableMapping.DelimitedTableName, keyColumnsStatement, fullTextColumn, pkColumns);
+          sql = string.Format("CREATE TABLE {0} ({1}, body json not null {2} {3}, PRIMARY KEY ({4}));", this.TableMapping.DelimitedTableName, keyColumnsStatement, fullTextColumn, lazyLoadingColumns, pkColumns);
           this.Model.Execute(sql);
           return TryLoadData();
         } else {

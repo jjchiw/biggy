@@ -28,4 +28,13 @@ namespace Biggy {
     }
   }
 
+  public class LazyLoadingAttribute : Attribute {
+      public int FirstLimit { get; protected set; }
+      public bool IsDocument { get; protected set; }
+      public LazyLoadingAttribute(bool isDocument = false, int firstLimit  = 10) {
+          FirstLimit = firstLimit;
+          IsDocument = isDocument;
+      }
+  }
+
 }

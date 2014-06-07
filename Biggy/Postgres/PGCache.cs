@@ -119,5 +119,29 @@ namespace Biggy.Postgres
       }
       return sb.ToString();
     }
+
+    public List<string> GetColumnsNames(string tableName) {
+        var columns = new List<string>();
+        string select = @"
+                        SELECT column_name
+                        FROM INFORMATION_SCHEMA.COLUMNS
+                        WHERE TABLE_SCHEMA = 'public'
+                        AND  TABLE_NAME = '{0}';";
+        string sql = string.Format(select, tableName);
+        using (var conn = this.OpenConnection())
+        {
+            using (var cmd = conn.CreateCommand())
+            {
+                cmd.CommandText = sql;
+                var dr = cmd.ExecuteReader();
+                while (dr.Read())
+                {
+                    columns.Add(dr["column_name"] as string);
+                }
+            }
+        }
+
+        return columns;
+    }
   }
 }

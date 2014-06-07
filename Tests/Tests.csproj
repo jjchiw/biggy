@@ -54,6 +54,7 @@
     <Compile Include="JSON\Store.cs" />
     <Compile Include="Postgres\BiggyListWithPG.cs" />
     <Compile Include="Postgres\BiggyListWithPGDocuments.cs" />
+    <Compile Include="Postgres\BiggyListWithPgLazyLoadingRelation.cs" />
     <Compile Include="Postgres\FullText.cs" />
     <Compile Include="Postgres\PostgresStore.cs" />
     <Compile Include="Postgres\PostgresDocumentStore.cs" />

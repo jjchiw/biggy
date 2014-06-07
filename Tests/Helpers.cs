@@ -109,4 +109,64 @@ namespace Tests {
     [DbColumn("Email")]
     public string EmailAddress { get; set; }
   }
+
+  class ClownDocument {
+      public int Id { get; set; }
+      public string Name { get; set; }
+      [FullText]
+      public string LifeStory { get; set; }
+      public DateTime Birthday { get; set; }
+
+      [LazyLoading(true, firstLimit:1)]
+      public List<PartyDenormalized<PartyDocument>> Parties { get; set; }
+
+      [LazyLoading(firstLimit:2)]
+      public List<Schedule> Schedules { get; set; }
+
+      public List<string> OtherNames { get; set; }
+
+      public ClownDocument()
+      {
+          Birthday = DateTime.Today;
+          Parties = new List<PartyDenormalized<PartyDocument>>();
+          Schedules = new List<Schedule>();
+          OtherNames = new List<string>();
+      }
+  }
+
+  class Schedule
+  {
+      public DateTime BeginDate { get; set; }
+      public DateTime EndDate { get; set; }
+      public string Name { get; set; }
+  }
+
+  class PartyDocument : IPartyDenormalized {
+      public int Id { get; set; }
+      public string Name { get; set; }
+      public string Address { get; set; }
+      public DateTime Date { get; set; }
+  }
+
+  public interface IPartyDenormalized
+  {
+      int Id { get; set; }
+      string Name { get; set; }
+  }
+
+  public class PartyDenormalized<T> where T : IPartyDenormalized
+  {
+      public int Id { get; set; }
+      public string Name { get; set; }
+
+      public static implicit operator PartyDenormalized<T>(T doc)
+      {
+          return new PartyDenormalized<T>
+          {
+              Id = doc.Id,
+              Name = doc.Name
+          };
+      }
+  }
+
 }

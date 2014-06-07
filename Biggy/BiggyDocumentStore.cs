@@ -20,6 +20,7 @@ namespace Biggy
     public abstract BiggyRelationalStore<dynamic> getModel();
 
     public string[] FullTextFields { get; set; }
+    public string[] LazyLoadingFields { get; set; }
     public BiggyRelationalStore<dynamic> Model { get; set; }
     public DbCache DbCache { get; set; }
 
@@ -29,6 +30,7 @@ namespace Biggy
     }
 
     public BiggyDocumentStore(DbCache dbCache) {
+      SetLazyLoadingColumns();
       this.DbCache = dbCache;
       this.Model = this.getModel();
       this.TableMapping = this.getTableMappingForT();
@@ -38,6 +40,7 @@ namespace Biggy
 
     string _userDefinedTableName = "";
     public BiggyDocumentStore(DbCache dbCache, string tableName) {
+      SetLazyLoadingColumns();
       _userDefinedTableName = tableName;
       this.DbCache = dbCache;
       this.Model = this.getModel();
@@ -62,6 +65,11 @@ namespace Biggy
       }
       result.ColumnMappings.Add("body", "body");
       result.ColumnMappings.Add("search", "search");
+
+      foreach (var item in LazyLoadingFields){
+          result.ColumnMappings.Add(item.ToLower(), item);
+      }
+
       return result;
     }
 
@@ -81,6 +89,11 @@ namespace Biggy
     void SetFullTextColumns() {
       var foundProps = new T().LookForCustomAttribute(typeof(FullTextAttribute));
       this.FullTextFields = foundProps.Select(x => x.Name).ToArray();
+    }
+
+    void SetLazyLoadingColumns() {
+        var foundProps = new T().LookForCustomAttribute(typeof(LazyLoadingAttribute));
+        this.LazyLoadingFields = foundProps.Select(x => x.Name).ToArray();
     }
 
     List<DbColumnMapping> getPrimaryKeyForT() {
@@ -133,7 +146,7 @@ namespace Biggy
     }
 
     protected ExpandoObject SetDataForDocument(T item) {
-      var json = JsonConvert.SerializeObject(item);
+      
       var expando = new ExpandoObject();
       var dict = expando as IDictionary<string, object>;
 
@@ -154,6 +167,21 @@ namespace Biggy
         }
         dict["search"] = string.Join(",", vals);
       }
+
+      if (this.LazyLoadingFields.Length > 0) {
+          //get the data from the item passed in
+          var itemdc = item.ToDictionary();
+          var vals = new List<string>();
+          foreach (var ft in this.LazyLoadingFields)
+          {
+              dict[ft] = itemdc[ft] == null ? "" : JsonConvert.SerializeObject(itemdc[ft]);
+              
+          }
+      }
+
+      var json = JsonConvert.SerializeObject(item);
+      dict["body"] = json;
+
       return expando;
     }
 
@@ -173,6 +201,7 @@ namespace Biggy
         var json = string.Format("[{0}]", stripped);
         list = JsonConvert.DeserializeObject<List<T>>(json);
       }
+
       return list;
     }
 
