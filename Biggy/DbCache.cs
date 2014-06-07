@@ -17,6 +17,7 @@ namespace Biggy
     protected abstract void LoadDbColumnsList();
     protected abstract void LoadDbTableNames();
     public abstract bool TableExists(string delimitedTableName);
+    public abstract string ToIdiomaticDbName(string domainObjectName);
 
     public string ConnectionString { get; set; }
     public List<DbColumnMapping> DbColumnsList { get; set; }
@@ -91,8 +92,9 @@ namespace Biggy
     }
 
     // TODO: Clean this up and make it consistent with TableExists. Handle the Delimited/not delimited table name mismatch
-    public void DropTable(string delimitedTableName) {
-      string sql = string.Format("DROP TABLE {0}", delimitedTableName);
+    public void DropTable(string notDelimitedTableName) {
+      string delimited = string.Format(this.DbDelimiterFormatString, notDelimitedTableName);
+      string sql = string.Format("DROP TABLE {0}", delimited);
       using (var conn = this.OpenConnection()) {
         using (var cmd = conn.CreateCommand()) {
           cmd.CommandText = sql;

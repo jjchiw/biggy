@@ -13,21 +13,52 @@ namespace Tests.Postgres {
     string _connectionStringName = "chinookPG";
     IBiggyStore<ClientDocument> clientDocs;
     IBiggyStore<MonkeyDocument> monkeyDocs;
+    PGCache _cache;
 
     public PostgresDocumentStore() {
-      var _cache = new PGCache(_connectionStringName);
+      _cache = new PGCache(_connectionStringName);
 
       // Build a table to play with from scratch each time:
 
-      // This needs a fix - gotta pass undelimited table name to one, and delimited to the other. FIX ME, DAMMIT!
-      if (_cache.TableExists("ClientDocuments")) {
-        _cache.DropTable("\"ClientDocuments\"");
+      if (_cache.TableExists("client_documents")) {
+        _cache.DropTable("client_documents");
       }
-      if (_cache.TableExists("MonkeyDocuments")) {
-        _cache.DropTable("\"MonkeyDocuments\"");
+      if (_cache.TableExists("monkey_documents")) {
+        _cache.DropTable("monkey_documents");
+      }
+      if (_cache.TableExists("test_pg_document_tables")) {
+        _cache.DropTable("test_pg_document_tables");
       }
       clientDocs = new PGDocumentStore<ClientDocument>(_connectionStringName);
       monkeyDocs = new PGDocumentStore<MonkeyDocument>(_connectionStringName);
+    }
+
+
+    class TestPgDocumentTable {
+      public int TestPgDocumentTableId { get; set; }
+      public string EntityName { get; set; }
+    }
+
+
+    [Fact(DisplayName = "Default document table uses PG-idiomatic naming")]
+    public void Default_Document_Table_Uses_PG_Idiomatic_Naming() {
+      var testTable = new TestPgDocumentTable();
+      var typeInfo = testTable.GetType();
+      string tableName = typeInfo.Name;
+      var props = typeInfo.GetProperties();
+
+      // The table name gets pluralized on creation:
+      if (_cache.TableExists("test_pg_document_tables")) {
+        _cache.DropTable("test_pg_document_tables");
+      }
+      // Re-load the cached schema info:
+      _cache = new PGCache(_connectionStringName);
+      var testDocs = new PGDocumentStore<TestPgDocumentTable>(_cache);
+      var mapping = testDocs.Model.TableMapping;
+      string newTableName = mapping.DBTableName;
+
+      // Check for the pluralized table name, and the PG-idiomatic PK Column:
+      Assert.True(newTableName == "test_pg_document_tables" && mapping.ColumnMappings.ContainsColumnName("test_pg_document_table_id"));
     }
 
 

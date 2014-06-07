@@ -20,10 +20,10 @@ namespace Tests.Postgres {
 
       // Build a table to play with from scratch each time:
       if (cache.TableExists("PropertyDocuments")) {
-        cache.DropTable("\"PropertyDocuments\"");
+        cache.DropTable("PropertyDocuments");
       }
-      if (cache.TableExists("BuildingDocuments")) {
-        cache.DropTable("\"BuildingDocuments\"");
+      if (cache.TableExists("building_documents")) {
+        cache.DropTable("building_documents");
       }
       propertyDocs = new PGDocumentStore<PropertyDocument>(_connectionStringName);
       buildingDocs = new PGDocumentStore<BuildingDocument>(_connectionStringName);

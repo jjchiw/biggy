@@ -92,30 +92,16 @@ namespace Biggy.Postgres
       return exists;
     }
 
-    public string ToTableName(string typeName) {
-      var sb = new StringBuilder(typeName);
+    public override string ToIdiomaticDbName(string domainObjectName) {
+      var sb = new StringBuilder(domainObjectName);
       int insertions = 0;
       sb[0] = char.ToLower(sb[0]);
-      for (int i=1; i<typeName.Length; ++i) {
-        if (char.IsUpper(typeName[i])) {
-    	  sb[i+insertions] = char.ToLower(typeName[i]);
-    	  sb.Insert(i+insertions, '_');
-    	  insertions++;
-    	}
-      }
-      return sb.ToString();
-    }
- 
-    public string ToClassName(string tableName) {
-      var sb = new StringBuilder(tableName);
-      int deletions = 0;
-      sb[0] = char.ToUpper(sb[0]);
-      for (int i=1; i<tableName.Length; ++i) {
-        if (tableName[i] == '_') {
-    	  sb.Remove(i-deletions, 1);
-    	  sb[i-deletions] = char.ToUpper(sb[i-deletions]);
-    	  deletions++;
-    	}
+      for (int i = 1; i < domainObjectName.Length; ++i) {
+        if (char.IsUpper(domainObjectName[i])) {
+          sb[i + insertions] = char.ToLower(domainObjectName[i]);
+          sb.Insert(i + insertions, '_');
+          insertions++;
+        }
       }
       return sb.ToString();
     }

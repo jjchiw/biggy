@@ -87,5 +87,10 @@ namespace Biggy.SQLServer
       }
       return exists;
     }
+
+    public override string ToIdiomaticDbName(string domainObjectName) {
+      // SQL Server has no formatting concerns for object names:
+      return domainObjectName;
+    }
   }
 }

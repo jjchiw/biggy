@@ -81,7 +81,13 @@ namespace Biggy
       if(string.IsNullOrEmpty(_userDefinedTableName)) {
         //use the type name
         var baseName = this.GetBaseName();
-        return Inflector.Inflector.Pluralize(baseName);
+        var itemType = new T().GetType();
+        var tableNameAttribute = itemType.GetCustomAttributes(false).FirstOrDefault(a => a.GetType() == typeof(DbTableAttribute)) as DbTableAttribute;
+        if (tableNameAttribute != null) {
+          baseName = tableNameAttribute.Name;
+          return baseName;
+        }
+        return this.DbCache.ToIdiomaticDbName(Inflector.Inflector.Pluralize(baseName));
       }
       return _userDefinedTableName;
     }
@@ -100,8 +106,6 @@ namespace Biggy
       List<DbColumnMapping> result = new List<DbColumnMapping>();
       string newTableName = this.DecideTableName();
       var baseName = this.GetBaseName();
-      var acceptableKeys = new string[] { "ID", baseName + "ID" };
-      //var props = typeof(T).GetProperties();
 
       var item = new T();
       var itemType = item.GetType();
@@ -116,10 +120,17 @@ namespace Biggy
         foreach (var pk in foundProps) {
           var attribute = pk.GetCustomAttributes(false).First(a => a.GetType() == typeof(PrimaryKeyAttribute));
           var pkAttribute = attribute as PrimaryKeyAttribute;
-          //PrimaryKeyAttribute pkAttribute = pk.GetCustomAttributes(typeof(PrimaryKeyAttribute), false).FirstOrDefault() as PrimaryKeyAttribute;
+
+          string inferredColumnName = this.DbCache.ToIdiomaticDbName(pk.Name);
+          // Check for attribute-specified property name:
+          var propertyNameAttribute = pk.GetCustomAttributes(false).FirstOrDefault(a => a.GetType() == typeof(DbColumnAttribute)) as DbColumnAttribute;
+          if (propertyNameAttribute != null) {
+            inferredColumnName = propertyNameAttribute.Name;
+          }
+
           var newMapping = new DbColumnMapping(this.DbCache.DbDelimiterFormatString);
           newMapping.TableName = newTableName;
-          newMapping.ColumnName = pk.Name;
+          newMapping.ColumnName = inferredColumnName;
           newMapping.DataType = pk.PropertyType;
           newMapping.PropertyName = pk.Name;
           newMapping.IsPrimaryKey = true;
@@ -127,13 +138,20 @@ namespace Biggy
           result.Add(newMapping);
         }
       } else {
-        // No custom attributes were found. Do your best with column names:
+        // No custom pk attributes were found. Do your best with column names:
         var conventionalKey = props.FirstOrDefault(x => x.Name.Equals("id", StringComparison.OrdinalIgnoreCase)) ??
             props.FirstOrDefault(x => x.Name.Equals(baseName + "ID", StringComparison.OrdinalIgnoreCase));
 
+        string inferredColumnName = this.DbCache.ToIdiomaticDbName(conventionalKey.Name);
+        // Check for attribute-specified property name:
+        var propertyNameAttribute = conventionalKey.GetCustomAttributes(false).FirstOrDefault(a => a.GetType() == typeof(DbColumnAttribute)) as DbColumnAttribute;
+        if (propertyNameAttribute != null) {
+          inferredColumnName = propertyNameAttribute.Name;
+        }
+
         var newMapping = new DbColumnMapping(this.DbCache.DbDelimiterFormatString);
         newMapping.DataType = typeof(int);
-        newMapping.ColumnName = conventionalKey.Name;
+        newMapping.ColumnName = inferredColumnName;
         newMapping.PropertyName = conventionalKey.Name;
         newMapping.IsPrimaryKey = true;
         newMapping.IsAutoIncementing = newMapping.DataType == typeof(int);
