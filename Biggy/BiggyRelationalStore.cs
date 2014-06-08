@@ -17,6 +17,7 @@ namespace Biggy {
     public abstract string GetInsertReturnValueSQL(string delimitedPkColumn);
     public abstract string GetSingleSelect(string delimitedTableName, string where);
     public abstract string BuildSelect(string where, string orderBy = "", int limit = 0);
+    public abstract string BuildSelect(string where, string orderBy = "", int limit = 0, int offset = 0);
     public virtual  string ConnectionString { get { return this.Cache.ConnectionString; } }
     public DBTableMapping TableMapping { get; set; }
 
@@ -35,7 +36,7 @@ namespace Biggy {
     /// Returns all records complying with the passed-in WHERE clause and arguments, 
     /// ordered as specified, limited (TOP) by limit.
     /// </summary>
-    public virtual IEnumerable<T> All<T>(string where = "", string orderBy = "", int limit = 0, string columns = "*", params object[] args) where T : new() {
+    public virtual IEnumerable<T> All<T>(string where = "", string orderBy = "", int limit = 0, int offset = 0, string columns = "*", params object[] args) where T : new() {
       string sql = this.BuildSelect(where, orderBy, limit);
       var formatted = string.Format(sql, columns, this.TableMapping.DelimitedTableName);
       return Query<T>(formatted, args);
@@ -486,6 +487,28 @@ namespace Biggy {
     public virtual bool BeforeDelete(T item) { return true; }
     public virtual bool BeforeSave(T item) { return true; }
 
+
+    public virtual string BuildWherePrimarykey(object parent)
+    {
+        var expando = parent.ToExpando();
+        var settings = (IDictionary<string, object>)expando;
+        StringBuilder sbWhere = new StringBuilder("");
+        foreach (var pk in this.TableMapping.PrimaryKeyMapping)
+        {
+            var value = settings[pk.PropertyName];
+            var name = pk.DelimitedColumnName;
+            if (pk == this.TableMapping.PrimaryKeyMapping[0])
+            {
+                sbWhere.Append(string.Format(" WHERE {0} = {1}", name, value));
+            }
+            else
+            {
+                sbWhere.Append(string.Format(" AND {0} = {1}", name, value));
+            }
+        }
+
+        return sbWhere.ToString();
+    }
 
     /// <summary>
     /// Creates a DBCommand that you can use for loving your database.

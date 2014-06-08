@@ -27,4 +27,13 @@ namespace Biggy
     public interface IQueryableBiggyList<T> : IBiggy<T> {
       IQueryable<T> AsQueryable();
     }
+
+    public interface ILazyLoadingCollection<T> : IEnumerable<T>
+    {
+        void Remove(T item);
+        void Remove(List<T> items);
+        void Add(T item);
+        void Add(List<T> items);
+        void Load(BiggyRelationalStore<dynamic> store, string property, int skip, int take, object parent, params object[] args);
+    }
 }

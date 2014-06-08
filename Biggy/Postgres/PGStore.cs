@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data.Common;
 using Npgsql;
+using Biggy.Extensions;
 
 namespace Biggy.Postgres
 {
@@ -26,7 +27,12 @@ namespace Biggy.Postgres
       return string.Format("SELECT * FROM {0} WHERE {1} LIMIT 1", delimitedTableName, where);
     }
 
-    public override string BuildSelect(string where, string orderBy, int limit) {
+    public override string BuildSelect(string where, string orderBy, int limit)
+    {
+        return BuildSelect(where, orderBy, limit, 0);
+    }
+
+    public override string BuildSelect(string where, string orderBy, int limit, int offset) {
       string sql = "SELECT {0} FROM {1} ";
       if (!string.IsNullOrEmpty(where)) {
         sql += where.Trim().StartsWith("where", StringComparison.OrdinalIgnoreCase) ? where : " WHERE " + where;
@@ -37,6 +43,11 @@ namespace Biggy.Postgres
 
       if (limit > 0) {
         sql += " LIMIT " + limit;
+      }
+
+      if (offset > 0)
+      {
+          sql += " OFFSET " + offset;
       }
       return sql;
     }

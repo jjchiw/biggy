@@ -117,19 +117,19 @@ namespace Tests {
       public string LifeStory { get; set; }
       public DateTime Birthday { get; set; }
 
-      [LazyLoading(true, firstLimit:1)]
-      public List<PartyDenormalized<PartyDocument>> Parties { get; set; }
+      [LazyLoading(true, FirstLimit:1, Reverse:true)]
+      public LazyLoadingDocumentCollection<PartyDenormalized<PartyDocument>> Parties { get; set; }
 
-      [LazyLoading(firstLimit:2)]
-      public List<Schedule> Schedules { get; set; }
+      [LazyLoading(FirstLimit:2)]
+      public LazyLoadingCollection<Schedule> Schedules { get; set; }
 
       public List<string> OtherNames { get; set; }
 
       public ClownDocument()
       {
           Birthday = DateTime.Today;
-          Parties = new List<PartyDenormalized<PartyDocument>>();
-          Schedules = new List<Schedule>();
+          Parties = new LazyLoadingDocumentCollection<PartyDenormalized<PartyDocument>>();
+          Schedules = new LazyLoadingCollection<Schedule>();
           OtherNames = new List<string>();
       }
   }

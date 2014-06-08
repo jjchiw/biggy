@@ -69,9 +69,13 @@
     <Compile Include="FileSystemStore.cs" />
     <Compile Include="IBiggy.cs" />
     <Compile Include="IBiggyStore.cs" />
+    <Compile Include="IgnorableSerializerContractResolver.cs" />
     <Compile Include="JSON\JsonStore.cs" />
     <Compile Include="Extensions\JsonExtensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
+    <Compile Include="LazyLoadingCollection.cs" />
+    <Compile Include="LazyLoadingDocumentCollection.cs" />
+    <Compile Include="LazyLoadingOptions.cs" />
     <Compile Include="Postgres\PGCache.cs" />
     <Compile Include="Postgres\PGDocumentStore.cs" />
     <Compile Include="Postgres\PGStore.cs" />

@@ -60,15 +60,19 @@ namespace Tests.Postgres
             var newClown = CreateClown();
             _clownDocuments.Add(newClown);
 
-            var newClownDocumentLL = new BiggyList<ClownDocument>(new PGDocumentStore<ClownDocument>(_connectionStringName));
+            var store = new PGDocumentStore<ClownDocument>(_connectionStringName);
+
+            var newClownDocumentLL = new BiggyList<ClownDocument>(store);
 
             var clown = newClownDocumentLL.First();
 
-            Assert.Equal(0, clown.Parties.Count);
+            Assert.Equal(0, clown.Parties.Count());
             Assert.Equal(0, clown.Schedules.Count);
             Assert.Equal(3, clown.OtherNames.Count);
 
-            clown.LazyLoadParties();
+            clown.Parties.Load(store.Model, "parties", 0, 2, clown);
+
+            Assert.Equal(2, clown.Parties.Count());
         }
 
         private static ClownDocument CreateClown()
@@ -91,7 +95,7 @@ namespace Tests.Postgres
             {
                 LifeStory = "English actor, comedian and dancer, who became the most popular English entertainer of the Regency era",
                 Name = "Joseph Grimaldi",
-                Schedules = new List<Schedule>
+                Schedules = new LazyLoadingCollection<Schedule>
                 {
                     new Schedule 
                     {

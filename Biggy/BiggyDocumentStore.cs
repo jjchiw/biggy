@@ -24,12 +24,15 @@ namespace Biggy
     public BiggyRelationalStore<dynamic> Model { get; set; }
     public DbCache DbCache { get; set; }
 
+   JsonSerializerSettings jsonSettings;
+
     public DBTableMapping TableMapping  {
       get { return this.Model.TableMapping; }
       set { this.Model.TableMapping = value; }
     }
 
     public BiggyDocumentStore(DbCache dbCache) {
+      jsonSettings = new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
       SetLazyLoadingColumns();
       this.DbCache = dbCache;
       this.Model = this.getModel();
@@ -40,6 +43,7 @@ namespace Biggy
 
     string _userDefinedTableName = "";
     public BiggyDocumentStore(DbCache dbCache, string tableName) {
+      jsonSettings = new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
       SetLazyLoadingColumns();
       _userDefinedTableName = tableName;
       this.DbCache = dbCache;
@@ -81,13 +85,7 @@ namespace Biggy
       if(string.IsNullOrEmpty(_userDefinedTableName)) {
         //use the type name
         var baseName = this.GetBaseName();
-        var itemType = new T().GetType();
-        var tableNameAttribute = itemType.GetCustomAttributes(false).FirstOrDefault(a => a.GetType() == typeof(DbTableAttribute)) as DbTableAttribute;
-        if (tableNameAttribute != null) {
-          baseName = tableNameAttribute.Name;
-          return baseName;
-        }
-        return this.DbCache.ToIdiomaticDbName(Inflector.Inflector.Pluralize(baseName));
+        return Inflector.Inflector.Pluralize(baseName);
       }
       return _userDefinedTableName;
     }
@@ -100,12 +98,25 @@ namespace Biggy
     void SetLazyLoadingColumns() {
         var foundProps = new T().LookForCustomAttribute(typeof(LazyLoadingAttribute));
         this.LazyLoadingFields = foundProps.Select(x => x.Name).ToArray();
+
+        if (foundProps.Count() > 0)
+        {
+            var jsonResolver = new IgnorableSerializerContractResolver();
+            foreach (var item in foundProps)
+            {
+                jsonResolver.Ignore(item.DeclaringType, item.Name);
+            }
+
+            jsonSettings.ContractResolver = jsonResolver;
+        }
     }
 
     List<DbColumnMapping> getPrimaryKeyForT() {
       List<DbColumnMapping> result = new List<DbColumnMapping>();
       string newTableName = this.DecideTableName();
       var baseName = this.GetBaseName();
+      var acceptableKeys = new string[] { "ID", baseName + "ID" };
+      //var props = typeof(T).GetProperties();
 
       var item = new T();
       var itemType = item.GetType();
@@ -120,17 +131,10 @@ namespace Biggy
         foreach (var pk in foundProps) {
           var attribute = pk.GetCustomAttributes(false).First(a => a.GetType() == typeof(PrimaryKeyAttribute));
           var pkAttribute = attribute as PrimaryKeyAttribute;
-
-          string inferredColumnName = this.DbCache.ToIdiomaticDbName(pk.Name);
-          // Check for attribute-specified property name:
-          var propertyNameAttribute = pk.GetCustomAttributes(false).FirstOrDefault(a => a.GetType() == typeof(DbColumnAttribute)) as DbColumnAttribute;
-          if (propertyNameAttribute != null) {
-            inferredColumnName = propertyNameAttribute.Name;
-          }
-
+          //PrimaryKeyAttribute pkAttribute = pk.GetCustomAttributes(typeof(PrimaryKeyAttribute), false).FirstOrDefault() as PrimaryKeyAttribute;
           var newMapping = new DbColumnMapping(this.DbCache.DbDelimiterFormatString);
           newMapping.TableName = newTableName;
-          newMapping.ColumnName = inferredColumnName;
+          newMapping.ColumnName = pk.Name;
           newMapping.DataType = pk.PropertyType;
           newMapping.PropertyName = pk.Name;
           newMapping.IsPrimaryKey = true;
@@ -138,20 +142,13 @@ namespace Biggy
           result.Add(newMapping);
         }
       } else {
-        // No custom pk attributes were found. Do your best with column names:
+        // No custom attributes were found. Do your best with column names:
         var conventionalKey = props.FirstOrDefault(x => x.Name.Equals("id", StringComparison.OrdinalIgnoreCase)) ??
             props.FirstOrDefault(x => x.Name.Equals(baseName + "ID", StringComparison.OrdinalIgnoreCase));
 
-        string inferredColumnName = this.DbCache.ToIdiomaticDbName(conventionalKey.Name);
-        // Check for attribute-specified property name:
-        var propertyNameAttribute = conventionalKey.GetCustomAttributes(false).FirstOrDefault(a => a.GetType() == typeof(DbColumnAttribute)) as DbColumnAttribute;
-        if (propertyNameAttribute != null) {
-          inferredColumnName = propertyNameAttribute.Name;
-        }
-
         var newMapping = new DbColumnMapping(this.DbCache.DbDelimiterFormatString);
         newMapping.DataType = typeof(int);
-        newMapping.ColumnName = inferredColumnName;
+        newMapping.ColumnName = conventionalKey.Name;
         newMapping.PropertyName = conventionalKey.Name;
         newMapping.IsPrimaryKey = true;
         newMapping.IsAutoIncementing = newMapping.DataType == typeof(int);
@@ -164,7 +161,7 @@ namespace Biggy
     }
 
     protected ExpandoObject SetDataForDocument(T item) {
-      
+      var json = JsonConvert.SerializeObject(item, jsonSettings);
       var expando = new ExpandoObject();
       var dict = expando as IDictionary<string, object>;
 
@@ -193,13 +190,8 @@ namespace Biggy
           foreach (var ft in this.LazyLoadingFields)
           {
               dict[ft] = itemdc[ft] == null ? "" : JsonConvert.SerializeObject(itemdc[ft]);
-              
           }
       }
-
-      var json = JsonConvert.SerializeObject(item);
-      dict["body"] = json;
-
       return expando;
     }
 

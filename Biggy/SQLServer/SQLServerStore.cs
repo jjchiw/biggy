@@ -33,6 +33,11 @@ namespace Biggy.SQLServer {
       return sql;
     }
 
+    public override string BuildSelect(string where, string orderBy = "", int limit = 0, int offset = 0)
+    {
+        throw new NotImplementedException();
+    }
+
     public override string GetSingleSelect(string delimitedTableName, string where) {
       return string.Format("SELECT TOP 2 * FROM {0} WHERE {1}", delimitedTableName, where);
     }
