@@ -60,9 +60,15 @@ namespace Biggy.SQLServer {
             var dict = (IDictionary<string, object>)expando;
             var conditionsList = new List<string>();
             foreach (var pk in this.TableMapping.PrimaryKeyMapping) {
-              string condition = string.Format("{0} = {1}", pk.DelimitedColumnName, dict[pk.PropertyName]);
+              // Most often it will be an int:
+              string conditionFormatString = "{0} = {1}";
+              if (pk.DataType == typeof(string)) {
+                // Wrap in single quotes
+                conditionFormatString = "{0} = '{1}'";
+              }
+              string condition = string.Format(conditionFormatString, pk.DelimitedColumnName, dict[pk.PropertyName]);
               conditionsList.Add(condition);
-            }
+            } 
             andList.Add(string.Format("({0})", string.Join(" AND ", conditionsList.ToArray())));
           }
           criteriaStatement = string.Join(" OR ", andList.ToArray());

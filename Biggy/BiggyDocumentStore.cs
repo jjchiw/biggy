@@ -74,12 +74,15 @@ namespace Biggy
         //use the type name
         var baseName = this.GetBaseName();
         var itemType = new T().GetType();
+
+        // First check for a custom attribute:
         var tableNameAttribute = itemType.GetCustomAttributes(false).FirstOrDefault(a => a.GetType() == typeof(DbTableAttribute)) as DbTableAttribute;
         if (tableNameAttribute != null) {
+          // Use the custom attribute decoration:
           baseName = tableNameAttribute.Name;
           return baseName;
         }
-        return this.DbCache.ToIdiomaticDbName(Inflector.Inflector.Pluralize(baseName));
+        return Inflector.Inflector.Pluralize(baseName);
       }
       return _userDefinedTableName;
     }
@@ -108,7 +111,7 @@ namespace Biggy
           var attribute = pk.GetCustomAttributes(false).First(a => a.GetType() == typeof(PrimaryKeyAttribute));
           var pkAttribute = attribute as PrimaryKeyAttribute;
 
-          string inferredColumnName = this.DbCache.ToIdiomaticDbName(pk.Name);
+          string inferredColumnName = pk.Name;
           // Check for attribute-specified property name:
           var propertyNameAttribute = pk.GetCustomAttributes(false).FirstOrDefault(a => a.GetType() == typeof(DbColumnAttribute)) as DbColumnAttribute;
           if (propertyNameAttribute != null) {

@@ -9,7 +9,7 @@ namespace Biggy {
   public class FullTextAttribute : Attribute { }
   public class PrimaryKeyAttribute : Attribute {
     public bool IsAutoIncrementing { get; private set; }
-    public PrimaryKeyAttribute(bool Auto = true) {
+    public PrimaryKeyAttribute(bool Auto) {
       this.IsAutoIncrementing = Auto;
     }
   }

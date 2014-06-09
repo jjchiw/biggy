@@ -34,9 +34,16 @@ namespace Tests {
     public string Name { get; set; }
   }
 
+  [DbTable("project")]
+  public class Project {
+    public int Id { get; set; }
+
+    public string ProjectName { get; set; }
+  }
+
 
   public class Film {
-    [PrimaryKey]
+    [PrimaryKey(Auto: true)]
     public int Film_ID { get; set; }
     public string Title { get; set; }
     public string Description { get; set; }
@@ -49,7 +56,16 @@ namespace Tests {
 
 
   public class Widget {
+    [PrimaryKey(Auto: false)]
     public string SKU { get; set; }
+    public string Name { get; set; }
+    public Decimal Price { get; set; }
+  }
+
+  public class CompoundWidget {
+    [PrimaryKey(Auto: false)]
+    public string SKU { get; set; }
+    [PrimaryKey(Auto: false)]
     public string Name { get; set; }
     public Decimal Price { get; set; }
   }
@@ -76,7 +92,7 @@ namespace Tests {
 
 
   public class Client {
-    [PrimaryKey]
+    [PrimaryKey(Auto: true)]
     public int ClientId { get; set; }
     public string LastName { get; set; }
     public string FirstName { get; set; }
@@ -90,7 +106,7 @@ namespace Tests {
 
 
   public class ClientDocument {
-    [PrimaryKey]
+    [PrimaryKey(Auto: true)]
     public int ClientDocumentId { get; set; }
     public string LastName { get; set; }
     public string FirstName { get; set; }
@@ -99,7 +115,7 @@ namespace Tests {
 
 
   class MismatchedClient {
-    [PrimaryKey]
+    [PrimaryKey(Auto: true)]
     [DbColumn("CLient_Id")]
     public int Id { get; set; }
     [DbColumn("Last Name")]

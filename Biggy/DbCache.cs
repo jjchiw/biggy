@@ -63,11 +63,12 @@ namespace Biggy
 
       var dbColumnInfo = from c in this.DbColumnsList where c.TableName == dbTableName select c;
       foreach(var property in properties) {
+        var propertyType = property.PropertyType;
         string flattenedPropertyName = rgx.Replace(property.Name.ToLower(), "");
         DbColumnMapping columnMapping = dbColumnInfo.FirstOrDefault(c => rgx.Replace(c.ColumnName.ToLower(), "") == flattenedPropertyName);
         if(columnMapping != null) {
           columnMapping.PropertyName = property.Name;
-          columnMapping.DataType = itemType;
+          columnMapping.DataType = propertyType;
         } else {
           // Look for a custom column name attribute:
           DbColumnAttribute mappedColumnAttribute = null;
@@ -78,7 +79,7 @@ namespace Biggy
             string matchColumnName = mappedColumnAttribute.Name;
             columnMapping = dbColumnInfo.FirstOrDefault(c => c.ColumnName == matchColumnName);
             columnMapping.PropertyName = property.Name;
-            columnMapping.DataType = itemType;
+            columnMapping.DataType = propertyType;
           }
         }
         if (columnMapping != null) {

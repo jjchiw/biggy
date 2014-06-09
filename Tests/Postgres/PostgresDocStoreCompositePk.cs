@@ -22,8 +22,8 @@ namespace Tests.Postgres {
       if (cache.TableExists("PropertyDocuments")) {
         cache.DropTable("PropertyDocuments");
       }
-      if (cache.TableExists("building_documents")) {
-        cache.DropTable("building_documents");
+      if (cache.TableExists("BuildingDocuments")) {
+        cache.DropTable("BuildingDocuments");
       }
       propertyDocs = new PGDocumentStore<PropertyDocument>(_connectionStringName);
       buildingDocs = new PGDocumentStore<BuildingDocument>(_connectionStringName);

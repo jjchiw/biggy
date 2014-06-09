@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Biggy.Perf {
 
   public class Track {
-    [PrimaryKey]
+    [PrimaryKey(Auto: true)]
     public int TrackID { get; set; }
     public int AlbumId { get; set; }
     public string Name { get; set; }
@@ -16,20 +16,20 @@ namespace Biggy.Perf {
   }
 
   public class Artist {
-    [PrimaryKey]
+    [PrimaryKey(Auto: true)]
     public int ArtistId { get; set; }
     public string Name { get; set; }
   }
 
   public class Album {
-    [PrimaryKey]
+    [PrimaryKey(Auto: true)]
     public int AlbumId { get; set; }
     public string Title { get; set; }
     public int ArtistId { get; set; }
   }
 
   public class Customer {
-    [PrimaryKey]
+    [PrimaryKey(Auto: true)]
     public int CustomerId { get; set; }
     public string LastName { get; set; }
     public string FirstName { get; set; }
@@ -38,7 +38,7 @@ namespace Biggy.Perf {
 
 
   public class Film {
-    [PrimaryKey]
+    [PrimaryKey(Auto: true)]
     public int Film_ID { get; set; }
     public string Title { get; set; }
     public string Description { get; set; }
@@ -51,7 +51,7 @@ namespace Biggy.Perf {
 
 
   public class MonkeyDocument {
-    [PrimaryKey(Auto: false)]
+    [PrimaryKey(Auto: true)]
     public string Name { get; set; }
     public DateTime Birthday { get; set; }
     [FullText]
@@ -62,7 +62,7 @@ namespace Biggy.Perf {
   // or other operations to avoid blowing up the serial PK and/or
   // ditching the Chinook Data:
   public class Client {
-    [PrimaryKey]
+    [PrimaryKey(Auto: true)]
     public int ClientId { get; set; }
     public string LastName { get; set; }
     public string FirstName { get; set; }
@@ -71,7 +71,7 @@ namespace Biggy.Perf {
 
 
   public class ClientDocument {
-    [PrimaryKey]
+    [PrimaryKey(Auto: true)]
     public int ClientDocumentId { get; set; }
     public string LastName { get; set; }
     public string FirstName { get; set; }
@@ -79,7 +79,7 @@ namespace Biggy.Perf {
   }
 
   public class Monkey {
-    [PrimaryKey]
+    [PrimaryKey(Auto: true)]
     public int ID { get; set; }
     public string Name { get; set; }
     public DateTime Birthday { get; set; }
