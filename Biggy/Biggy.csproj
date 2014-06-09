@@ -66,6 +66,7 @@
     <Compile Include="DbColumnMappingLookup.cs" />
     <Compile Include="DBTableMapping.cs" />
     <Compile Include="Examples\CompressedStore.cs" />
+    <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="FileSystemStore.cs" />
     <Compile Include="IBiggy.cs" />
     <Compile Include="IBiggyStore.cs" />
@@ -73,8 +74,9 @@
     <Compile Include="JSON\JsonStore.cs" />
     <Compile Include="Extensions\JsonExtensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
-    <Compile Include="LazyLoadingCollection.cs" />
-    <Compile Include="LazyLoadingDocumentCollection.cs" />
+    <Compile Include="LazyLoadingCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="LazyLoadingOptions.cs" />
     <Compile Include="Postgres\PGCache.cs" />
     <Compile Include="Postgres\PGDocumentStore.cs" />

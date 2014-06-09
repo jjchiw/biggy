@@ -14,6 +14,11 @@ namespace Biggy.Postgres {
     public PGDocumentStore(string connectionStringName) : base(new PGCache(connectionStringName)) { }
     public PGDocumentStore(string connectionStringName, string tableName) : base(new PGCache(connectionStringName), tableName) { }
 
+    public PGDocumentStore(DbCache context, object storedb) : base(context, storedb) { }
+    public PGDocumentStore(DbCache context, string tableName, object storedb) : base(context, tableName, storedb) { }
+    public PGDocumentStore(string connectionStringName, object storedb) : base(new PGCache(connectionStringName), storedb) { }
+    public PGDocumentStore(string connectionStringName, string tableName, object storedb) : base(new PGCache(connectionStringName), tableName, storedb) { }
+
     public override BiggyRelationalStore<dynamic> getModel() {
       return new PGStore<dynamic>(this.DbCache);
     }
@@ -214,7 +219,7 @@ namespace Biggy.Postgres {
     /// Updates a single T item
     /// </summary>
     public override T Update(T item) {
-      var expando = SetDataForDocument(item);
+      var expando = SetDataForDocumentUpdate(item);
       this.Model.Update(expando);
       return item;
     }
@@ -246,7 +251,13 @@ namespace Biggy.Postgres {
             var dict = (IDictionary<string, object>)expando;
             var sbValues = new StringBuilder("");
             foreach (var pk in this.TableMapping.PrimaryKeyMapping) {
-              sbValues.Append(string.Format("{0},", dict[pk.PropertyName].ToString()));
+              // This will usually be an int:
+              string arrayItemFormatString = "{0},";
+              if (pk.DataType == typeof(string)) {
+                // It's a string. Wrap in single quotes:
+                arrayItemFormatString = "'{0}',";
+              }
+              sbValues.AppendFormat(arrayItemFormatString, dict[pk.PropertyName].ToString());
             }
             string values = sbValues.ToString().Substring(0, sbValues.Length - 1);
             keyList.Add(string.Format("({0})", values));
@@ -257,7 +268,14 @@ namespace Biggy.Postgres {
           foreach (var item in items) {
             var expando = item.ToExpando();
             var dict = (IDictionary<string, object>)expando;
-            keyList.Add(dict[this.TableMapping.PrimaryKeyMapping[0].PropertyName].ToString());
+            var pk = this.TableMapping.PrimaryKeyMapping[0];
+            if (pk.DataType == typeof(string)) {
+              // Wrap in single quotes
+              keyList.Add(string.Format("'{0}'", dict[pk.PropertyName].ToString()));
+            } else {
+              // Don't wrap:
+              keyList.Add(dict[pk.PropertyName].ToString());
+            }
           }
         }
         var keySet = String.Join(",", keyList.ToArray());

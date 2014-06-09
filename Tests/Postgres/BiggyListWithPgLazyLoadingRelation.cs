@@ -7,9 +7,28 @@ using Biggy;
 using Biggy.Postgres;
 using Xunit;
 using Newtonsoft.Json;
+using Biggy.Extensions;
 
 namespace Tests.Postgres
 {
+    class StoreDB
+    {
+        public IBiggy<ClownDocument> ClownDocument { get; set; }
+        public IBiggy<PartyDocument> PartyDocument { get; set; }
+        string _connectionStringName;
+        public StoreDB(string connectionStringName)
+        {
+            _connectionStringName = connectionStringName;
+        }
+
+        void CreateContext()
+        {
+            ClownDocument = new BiggyList<ClownDocument>(new PGDocumentStore<ClownDocument>(_connectionStringName, this));
+            PartyDocument = new BiggyList<PartyDocument>(new PGDocumentStore<PartyDocument>(_connectionStringName, this));
+        }
+    }
+
+
     [Trait("Biggy List With Postgres Document Store, Lazy Loading Relations", "")]
     public class BiggyListWithPgLazyLoadingRelation
     {
@@ -24,12 +43,12 @@ namespace Tests.Postgres
             // This one will be re-created automagically:
             if (_cache.TableExists("ClownDocuments"))
             {
-                _cache.DropTable("\"ClownDocuments\"");
+                _cache.DropTable("ClownDocuments");
             }
 
             if (_cache.TableExists("PartyDocuments"))
             {
-                _cache.DropTable("\"PartyDocuments\"");
+                _cache.DropTable("PartyDocuments");
             }
             _clownDocuments = new BiggyList<ClownDocument>(new PGDocumentStore<ClownDocument>(_connectionStringName));
             _partyDocuments = new BiggyList<PartyDocument>(new PGDocumentStore<PartyDocument>(_connectionStringName));
@@ -70,12 +89,54 @@ namespace Tests.Postgres
             Assert.Equal(0, clown.Schedules.Count);
             Assert.Equal(3, clown.OtherNames.Count);
 
-            clown.Parties.Load(store.Model, "parties", 0, 2, clown);
-
+            clown.Parties.Load<PartyDenormalized<PartyDocument>>(store.Model, "parties", 0, 2, clown);
+            
             Assert.Equal(2, clown.Parties.Count());
+
+            clown.Schedules.Load<Schedule>(store.Model, "schedules", 2, 1, clown);
+
+            Assert.Equal(1, clown.Schedules.Count());
+            Assert.Equal("New Wig", clown.Schedules.FirstOrDefault().Name);
         }
 
-        private static ClownDocument CreateClown()
+        [Fact(DisplayName = "Update a document with a new relations marked as LazyLoading")]
+        public void Update_Document_With_Relations_And_Load_Lazy()
+        {
+            var newClown = CreateClown();
+            _clownDocuments.Add(newClown);
+
+            var store = new PGDocumentStore<ClownDocument>(_connectionStringName);
+
+            var newClownDocumentLL = new BiggyList<ClownDocument>(store);
+
+            var clown = newClownDocumentLL.First();
+
+            Assert.Equal(0, clown.Parties.Count());
+            Assert.Equal(0, clown.Schedules.Count);
+            Assert.Equal(3, clown.OtherNames.Count);
+
+            clown.Parties.Load<PartyDenormalized<PartyDocument>>(store.Model, "parties", 0, 2, clown);
+
+            Assert.Equal(2, clown.Parties.Count());
+
+            clown.Schedules.Load<Schedule>(store.Model, "schedules", 2, 1, clown);
+
+            Assert.Equal(1, clown.Schedules.Count());
+            Assert.Equal("New Wig", clown.Schedules.FirstOrDefault().Name);
+
+            clown.Schedules.Add(
+                new Schedule 
+                    {
+                        Name = "Need new horn for my bicycle",
+                        BeginDate = DateTime.Now.AddDays(4),
+                        EndDate = DateTime.Now.AddDays(4).AddHours(1)
+                    }
+            );
+
+            _clownDocuments.Update(clown);
+        }
+
+        private ClownDocument CreateClown()
         {
             var party = new PartyDocument
             {
@@ -90,6 +151,9 @@ namespace Tests.Postgres
                 Address = "1 Virginia Street, London E1",
                 Date = DateTime.Now.AddDays(100)
             };
+
+            _partyDocuments.Add(party);
+            _partyDocuments.Add(party2);
 
             var newClown = new ClownDocument
             {
@@ -116,11 +180,10 @@ namespace Tests.Postgres
                         EndDate = DateTime.Now.AddDays(3).AddHours(1)
                     }
                 },
+                Parties = new LazyLoadingCollection<PartyDenormalized<PartyDocument>> { party, party2 },
                 OtherNames = new List<string> { "Yakko", "Wakko", "Dot"}
             };
 
-            newClown.Parties.Add(party);
-            newClown.Parties.Add(party2);
             return newClown;
         }
 

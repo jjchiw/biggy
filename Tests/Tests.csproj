@@ -55,11 +55,15 @@
     <Compile Include="Postgres\BiggyListWithPG.cs" />
     <Compile Include="Postgres\BiggyListWithPGDocuments.cs" />
     <Compile Include="Postgres\BiggyListWithPgLazyLoadingRelation.cs" />
+    <Compile Include="Postgres\PostgresCompositePk.cs" />
     <Compile Include="Postgres\FullText.cs" />
     <Compile Include="Postgres\PostgresStore.cs" />
     <Compile Include="Postgres\PostgresDocumentStore.cs" />
+    <Compile Include="Postgres\PostgresDocStoreCompositePk.cs" />
     <Compile Include="SQLServer\BiggyListWithSQL.cs" />
     <Compile Include="SQLServer\BiggyListWithSQLDocuments.cs" />
+    <Compile Include="SQLServer\SQLServerDocStoreCompositePk.cs" />
+    <Compile Include="SQLServer\SqlServerCompositePk.cs" />
     <Compile Include="SQLServer\SQLServerDocumentStore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SQLServer\SQLStore.cs" />

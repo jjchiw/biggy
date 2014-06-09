@@ -21,11 +21,11 @@ namespace Tests.Postgres {
       var _cache = new PGCache(_connectionStringName);
       // This one will be re-created automagically:
       if (_cache.TableExists("ClientDocuments")) {
-        _cache.DropTable("\"ClientDocuments\"");
+        _cache.DropTable("ClientDocuments");
       }
       // This one will be re-created automagically:
       if (_cache.TableExists("MonkeyDocuments")) {
-        _cache.DropTable("\"MonkeyDocuments\"");
+        _cache.DropTable("MonkeyDocuments");
       }
       _clientDocuments = new BiggyList<ClientDocument>(new PGDocumentStore<ClientDocument>(_connectionStringName));
       _monkeyDocuments = new BiggyList<MonkeyDocument>(new PGDocumentStore<MonkeyDocument>(_connectionStringName));

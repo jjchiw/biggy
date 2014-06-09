@@ -123,6 +123,25 @@ namespace Tests.SQLServer {
     }
 
 
+    [Fact(DisplayName = "Deletes a Bunch of Records with a string key")]
+    public void IBiggyStore_Deletes_Many_Records_With_String_PK() {
+      IBiggyStore<Widget> widgetStore = new SQLServerStore<Widget>(_connectionStringName);
+      var insertThese = new List<Widget>();
+
+      for (int i = 0; i < 10; i++) {
+        var newWidget = new Widget() { SKU = "SKU " + i, Name = "Widget " + i, Price = Decimal.Parse(i.ToString()) };
+        insertThese.Add(newWidget);
+      }
+      widgetStore.Add(insertThese);
+      var newWidgets = widgetStore.Load();
+      int insertedCount = newWidgets.Count();
+
+      widgetStore.Remove(newWidgets);
+      newWidgets = widgetStore.Load();
+      Assert.True(insertedCount == 10 && newWidgets.Count() == 0);
+    }
+
+
     [Fact(DisplayName = "Pulls things dynamically")]
     public void PullsThingsDynamically() {
       var list = new SQLServerStore<dynamic>(_connectionStringName);

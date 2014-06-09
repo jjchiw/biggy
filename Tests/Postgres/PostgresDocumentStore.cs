@@ -20,45 +20,14 @@ namespace Tests.Postgres {
 
       // Build a table to play with from scratch each time:
 
-      if (_cache.TableExists("client_documents")) {
-        _cache.DropTable("client_documents");
+      if (_cache.TableExists("ClientDocuments")) {
+        _cache.DropTable("ClientDocuments");
       }
-      if (_cache.TableExists("monkey_documents")) {
-        _cache.DropTable("monkey_documents");
-      }
-      if (_cache.TableExists("test_pg_document_tables")) {
-        _cache.DropTable("test_pg_document_tables");
+      if (_cache.TableExists("MonkeyDocuments")) {
+        _cache.DropTable("MonkeyDocuments");
       }
       clientDocs = new PGDocumentStore<ClientDocument>(_connectionStringName);
       monkeyDocs = new PGDocumentStore<MonkeyDocument>(_connectionStringName);
-    }
-
-
-    class TestPgDocumentTable {
-      public int TestPgDocumentTableId { get; set; }
-      public string EntityName { get; set; }
-    }
-
-
-    [Fact(DisplayName = "Default document table uses PG-idiomatic naming")]
-    public void Default_Document_Table_Uses_PG_Idiomatic_Naming() {
-      var testTable = new TestPgDocumentTable();
-      var typeInfo = testTable.GetType();
-      string tableName = typeInfo.Name;
-      var props = typeInfo.GetProperties();
-
-      // The table name gets pluralized on creation:
-      if (_cache.TableExists("test_pg_document_tables")) {
-        _cache.DropTable("test_pg_document_tables");
-      }
-      // Re-load the cached schema info:
-      _cache = new PGCache(_connectionStringName);
-      var testDocs = new PGDocumentStore<TestPgDocumentTable>(_cache);
-      var mapping = testDocs.Model.TableMapping;
-      string newTableName = mapping.DBTableName;
-
-      // Check for the pluralized table name, and the PG-idiomatic PK Column:
-      Assert.True(newTableName == "test_pg_document_tables" && mapping.ColumnMappings.ContainsColumnName("test_pg_document_table_id"));
     }
 
 
@@ -178,6 +147,28 @@ namespace Tests.Postgres {
       clientDocs.Remove(deleteUs.ToList());
       var remaining = clientDocs.Load();
       Assert.True(insertedCount > remaining.Count && remaining.Count == 50);
+    }
+
+    [Fact(DisplayName = "Deletes a range of documents with string key")]
+    void Deletes_Range_of_Documents_With_String_PK() {
+      int INSERT_QTY = 100;
+      var bulkList = new List<MonkeyDocument>();
+      for (int i = 1; i <= INSERT_QTY; i++) {
+        var newMonkeyDocument = new MonkeyDocument {
+          Name = "MonkeyDocument " + i,
+          Birthday = DateTime.Now,
+          Description = "This is Monkey number " + i
+        };
+        bulkList.Add(newMonkeyDocument);
+      }
+      monkeyDocs.Add(bulkList);
+
+      var inserted = monkeyDocs.Load();
+      int insertedCount = inserted.Count;
+
+      var deleteUs = monkeyDocs.Remove(inserted);
+      var remaining = monkeyDocs.Load();
+      Assert.True(insertedCount > remaining.Count && remaining.Count == 0);
     }
 
   }

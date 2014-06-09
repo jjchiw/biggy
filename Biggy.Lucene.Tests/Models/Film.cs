@@ -1,6 +1,6 @@
 ﻿namespace Biggy.Lucene.Tests.Models {
   public class Film {
-    [PrimaryKey]
+    [PrimaryKey(Auto: true)]
     public int FilmId { get; set; }
 
     [FullText]

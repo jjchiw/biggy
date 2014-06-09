@@ -15,16 +15,17 @@ namespace Tests.SQLServer {
   public class SQLServerStoreWithCompositePk {
     IBiggyStore<Property> _propertyStore;
     IBiggyStore<Building> _buildingStore;
+    SQLServerCache _cache;
     public SQLServerStoreWithCompositePk() {
-      var context = new SQLServerCache("chinook");
+      _cache = new SQLServerCache("chinook");
 
       // Build a table to play with from scratch each time:
-      if (context.TableExists("Property")) {
-        context.DropTable("Property");
+      if (_cache.TableExists("Property")) {
+        _cache.DropTable("Property");
       }
 
-      if (context.TableExists("Building")) {
-        context.DropTable("Building");
+      if (_cache.TableExists("Building")) {
+        _cache.DropTable("Building");
       }
 
       var columnDefs = new List<string>();
@@ -32,10 +33,10 @@ namespace Tests.SQLServer {
       columnDefs.Add("BuildingId int NOT NULL");
       columnDefs.Add("Name Text NOT NULL");
       columnDefs.Add("PRIMARY KEY (PropertyId, BuildingId)");
-      context.CreateTable("Building", columnDefs);
+      _cache.CreateTable("Building", columnDefs);
 
-      _propertyStore = new SQLServerStore<Property>(context);
-      _buildingStore = new SQLServerStore<Building>(context);
+      _propertyStore = new SQLServerStore<Property>(_cache);
+      _buildingStore = new SQLServerStore<Building>(_cache);
 
     }
 
@@ -114,6 +115,24 @@ namespace Tests.SQLServer {
 
       var fetchBuildings = _buildingStore.Load();
       Assert.True(initialCount == 10 && fetchBuildings.Count() == 5);
+    }
+
+    [Fact(DisplayName = "Deletes range of records with composite string keys")]
+    public void Deletes_Range_of_Records_With_Composite_String_PK() {
+      var list = new List<CompoundWidget>();
+      for (int i = 1; i <= 10; i++) {
+        var newWidget = new CompoundWidget() { SKU = "SKU " + i, Name = "Widget " + i, Price = Decimal.Parse(i.ToString()) };
+        list.Add(newWidget);
+      }
+      int initialCount = list.Count;
+      IBiggyStore<CompoundWidget> cpdWidgetStore = new SQLServerStore<CompoundWidget>(_cache);
+      cpdWidgetStore.Add(list);
+
+      var deleteMe = cpdWidgetStore.Load();
+      cpdWidgetStore.Remove(deleteMe.ToList());
+
+      var fetchWidgets = cpdWidgetStore.Load();
+      Assert.True(initialCount == 10 && fetchWidgets.Count() == 0);
     }
   }
 }

@@ -9,7 +9,7 @@ namespace Biggy {
   public class FullTextAttribute : Attribute { }
   public class PrimaryKeyAttribute : Attribute {
     public bool IsAutoIncrementing { get; private set; }
-    public PrimaryKeyAttribute(bool Auto = true) {
+    public PrimaryKeyAttribute(bool Auto) {
       this.IsAutoIncrementing = Auto;
     }
   }
@@ -29,14 +29,6 @@ namespace Biggy {
   }
 
   public class LazyLoadingAttribute : Attribute {
-      public int FirstLimit { get; protected set; }
-      public bool IsDocument { get; protected set; }
-      public bool Reverse { get; set; }
-      public LazyLoadingAttribute(bool IsDocument = false, int FirstLimit  = 10, bool Reverse = false) {
-          this.FirstLimit = FirstLimit;
-          this.IsDocument = IsDocument;
-          this.Reverse = Reverse;
-      }
   }
 
 }
