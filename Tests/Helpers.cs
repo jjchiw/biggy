@@ -127,16 +127,17 @@ namespace Tests {
   }
 
   class ClownDocument {
+
       public int Id { get; set; }
       public string Name { get; set; }
       [FullText]
       public string LifeStory { get; set; }
       public DateTime Birthday { get; set; }
 
-      [LazyLoading]
+      [LazyLoading("Id")]
       public LazyLoadingCollection<PartyDenormalized<PartyDocument>> Parties { get; set; }
 
-      [LazyLoading]
+      [LazyLoading("Guid")]
       public LazyLoadingCollection<Schedule> Schedules { get; set; }
 
       public List<string> OtherNames { get; set; }
@@ -145,6 +146,32 @@ namespace Tests {
       {
           Birthday = DateTime.Today;
           OtherNames = new List<string>();
+          Parties = new LazyLoadingCollection<PartyDenormalized<PartyDocument>>();
+          Schedules = new LazyLoadingCollection<Schedule>();
+      }
+
+      public override bool Equals(System.Object obj)
+      {
+          // If parameter cannot be cast to ThreeDPoint return false:
+          var p = obj as ClownDocument;
+          if ((object)p == null)
+          {
+              return false;
+          }
+
+          // Return true if the fields match:
+          return Id == p.Id;
+      }
+
+      public bool Equals(ClownDocument p)
+      {
+          // Return true if the fields match:
+          return Id == p.Id;
+      }
+
+      public override int GetHashCode()
+      {
+          return Id.GetHashCode();
       }
   }
 
@@ -187,6 +214,50 @@ namespace Tests {
               Name = doc.Name
           };
       }
+
+      //public override bool Equals(System.Object obj)
+      //{
+      //    // If parameter cannot be cast to ThreeDPoint return false:
+      //    var p = obj as PartyDenormalized<T>;
+      //    if ((object)p == null)
+      //    {
+      //        return false;
+      //    }
+
+      //    // Return true if the fields match:
+      //    return Id == p.Id;
+      //}
+
+      //public bool Equals(PartyDenormalized<T> p)
+      //{
+      //    // Return true if the fields match:
+      //    return Id == p.Id;
+      //}
+
+      //public override int GetHashCode()
+      //{
+      //    return Id.GetHashCode();
+      //}
+
+      //public static bool operator ==(PartyDenormalized<T> a, PartyDenormalized<T> b)
+      //{
+      //    return a.Equals(b);
+      //}
+
+      //public static bool operator !=(PartyDenormalized<T> a, PartyDenormalized<T> b)
+      //{
+      //    return !(a == b);
+      //}
+
+      //public static bool operator ==(PartyDenormalized<T> a, dynamic b)
+      //{
+      //    return a.Equals(b as PartyDenormalized<T>);
+      //}
+
+      //public static bool operator !=(PartyDenormalized<T> a, dynamic b)
+      //{
+      //    return !(a == b);
+      //}
   }
 
 }

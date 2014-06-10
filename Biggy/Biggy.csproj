@@ -66,6 +66,7 @@
     <Compile Include="DbColumnMappingLookup.cs" />
     <Compile Include="DBTableMapping.cs" />
     <Compile Include="Examples\CompressedStore.cs" />
+    <Compile Include="Extensions\LazyLoadingHelper.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="FileSystemStore.cs" />
     <Compile Include="IBiggy.cs" />

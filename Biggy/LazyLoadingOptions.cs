@@ -8,7 +8,7 @@ namespace Biggy
 {
     internal class LazyLoadingOptions
     {
+        public string PrimaryKey { get; set; }
         public string Name { get; set; }
-        public bool Reverse { get; set; }
     }
 }

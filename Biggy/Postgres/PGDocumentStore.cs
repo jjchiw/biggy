@@ -40,7 +40,7 @@ namespace Biggy.Postgres {
           }
           string lazyLoadingColumns = "";
           if (this.LazyLoadingFields.Length > 0) {
-              lazyLoadingColumns = string.Format(", {0} json", string.Join(" json, ", this.LazyLoadingFields));
+              lazyLoadingColumns = string.Format(", {0} json", string.Join(" json, ", this.LazyLoadingFields.Select(y => y.Name)));
           }
           string keyDefStub = "{0} {1} not null";
           foreach (var pk in Model.TableMapping.PrimaryKeyMapping) {

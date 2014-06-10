@@ -11,20 +11,52 @@ using Biggy.Extensions;
 
 namespace Tests.Postgres
 {
-    class StoreDB
+    public class StoreDb
     {
-        public IBiggy<ClownDocument> ClownDocument { get; set; }
-        public IBiggy<PartyDocument> PartyDocument { get; set; }
-        string _connectionStringName;
-        public StoreDB(string connectionStringName)
+        readonly Dictionary<Type, object> _stores;
+        readonly Dictionary<Type, object> _documents;
+        readonly string _connectionStringName;
+        readonly bool _inMemoryList;
+
+        public StoreDb(string connectionStringName) : this(connectionStringName, false) { }
+
+        public StoreDb(string connectionStringName, bool inMemoryList)
         {
             _connectionStringName = connectionStringName;
+            _stores = new Dictionary<Type, object>();
+            _documents = new Dictionary<Type, object>();
+            _inMemoryList = inMemoryList;
         }
 
-        void CreateContext()
+        public IBiggyStore<T> GetStoreDb<T>() where T : new()
         {
-            ClownDocument = new BiggyList<ClownDocument>(new PGDocumentStore<ClownDocument>(_connectionStringName, this));
-            PartyDocument = new BiggyList<PartyDocument>(new PGDocumentStore<PartyDocument>(_connectionStringName, this));
+            IBiggyStore<T> result;
+            object resultTemp;
+
+            if (_stores.TryGetValue(typeof(T), out resultTemp))
+            {
+                return resultTemp as IBiggyStore<T>;
+            }
+
+            result = new PGDocumentStore<T>(_connectionStringName);
+            _stores.Add(typeof(T), result);
+            return result;
+        }
+
+
+        public IBiggy<T> GetBiggyList<T>() where T : new()
+        {
+            IBiggy<T> result;
+            object resultTemp;
+
+            if (_documents.TryGetValue(typeof(T), out resultTemp))
+            {
+                return resultTemp as IBiggy<T>;
+            }
+
+            result = new BiggyList<T>(GetStoreDb<T>(), _inMemoryList);
+            _documents.Add(typeof(T), result);
+            return result;
         }
     }
 
@@ -33,12 +65,13 @@ namespace Tests.Postgres
     public class BiggyListWithPgLazyLoadingRelation
     {
         string _connectionStringName = "clownsPG";
-        IBiggy<ClownDocument> _clownDocuments;
-        IBiggy<PartyDocument> _partyDocuments;
+        StoreDb _store;
         PGCache _cache;
 
         public BiggyListWithPgLazyLoadingRelation()
         {
+            _store = new StoreDb(_connectionStringName);
+
             _cache = new PGCache(_connectionStringName);
             // This one will be re-created automagically:
             if (_cache.TableExists("ClownDocuments"))
@@ -50,8 +83,6 @@ namespace Tests.Postgres
             {
                 _cache.DropTable("PartyDocuments");
             }
-            _clownDocuments = new BiggyList<ClownDocument>(new PGDocumentStore<ClownDocument>(_connectionStringName));
-            _partyDocuments = new BiggyList<PartyDocument>(new PGDocumentStore<PartyDocument>(_connectionStringName));
         }
 
 
@@ -68,16 +99,16 @@ namespace Tests.Postgres
         public void Adds_Document_With_Relations()
         {
             var newClown = CreateClown();
-            _clownDocuments.Add(newClown);
+            _store.GetBiggyList<ClownDocument>().Add(newClown);
 
-            Assert.Equal(1, _clownDocuments.Count());
+            Assert.Equal(1, _store.GetBiggyList<ClownDocument>().Count());
         }
 
         [Fact(DisplayName = "Adds a document with a relations and load lazy loaded")]
         public void Adds_Document_With_Relations_And_Load_Lazy()
         {
             var newClown = CreateClown();
-            _clownDocuments.Add(newClown);
+            _store.GetBiggyList<ClownDocument>().Add(newClown);
 
             var store = new PGDocumentStore<ClownDocument>(_connectionStringName);
 
@@ -86,8 +117,8 @@ namespace Tests.Postgres
             var clown = newClownDocumentLL.First();
 
             Assert.Equal(0, clown.Parties.Count());
-            Assert.Equal(0, clown.Schedules.Count);
-            Assert.Equal(3, clown.OtherNames.Count);
+            Assert.Equal(0, clown.Schedules.Count());
+            Assert.Equal(3, clown.OtherNames.Count());
 
             clown.Parties.Load<PartyDenormalized<PartyDocument>>(store.Model, "parties", 0, 2, clown);
             
@@ -103,7 +134,7 @@ namespace Tests.Postgres
         public void Update_Document_With_Relations_And_Load_Lazy()
         {
             var newClown = CreateClown();
-            _clownDocuments.Add(newClown);
+            _store.GetBiggyList<ClownDocument>().Add(newClown);
 
             var store = new PGDocumentStore<ClownDocument>(_connectionStringName);
 
@@ -112,7 +143,7 @@ namespace Tests.Postgres
             var clown = newClownDocumentLL.First();
 
             Assert.Equal(0, clown.Parties.Count());
-            Assert.Equal(0, clown.Schedules.Count);
+            Assert.Equal(0, clown.Schedules.Count());
             Assert.Equal(3, clown.OtherNames.Count);
 
             clown.Parties.Load<PartyDenormalized<PartyDocument>>(store.Model, "parties", 0, 2, clown);
@@ -133,7 +164,7 @@ namespace Tests.Postgres
                     }
             );
 
-            _clownDocuments.Update(clown);
+            _store.GetBiggyList<ClownDocument>().Update(clown);
         }
 
         private ClownDocument CreateClown()
@@ -152,8 +183,8 @@ namespace Tests.Postgres
                 Date = DateTime.Now.AddDays(100)
             };
 
-            _partyDocuments.Add(party);
-            _partyDocuments.Add(party2);
+            _store.GetBiggyList<PartyDocument>().Add(party);
+            _store.GetBiggyList<PartyDocument>().Add(party2);
 
             var newClown = new ClownDocument
             {

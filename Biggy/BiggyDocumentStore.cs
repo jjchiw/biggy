@@ -20,7 +20,7 @@ namespace Biggy
     public abstract BiggyRelationalStore<dynamic> getModel();
 
     public string[] FullTextFields { get; set; }
-    public string[] LazyLoadingFields { get; set; }
+    internal LazyLoadingOptions[] LazyLoadingFields { get; set; }
     public BiggyRelationalStore<dynamic> Model { get; set; }
     public DbCache DbCache { get; set; }
     public object Store { get; set; }
@@ -97,7 +97,7 @@ namespace Biggy
       result.ColumnMappings.Add("search", "search");
 
       foreach (var item in LazyLoadingFields){
-          result.ColumnMappings.Add(item.ToLower(), item);
+          result.ColumnMappings.Add(item.Name.ToLower(), item.Name);
       }
 
       return result;
@@ -132,7 +132,11 @@ namespace Biggy
 
     void SetLazyLoadingColumns() {
         var foundProps = new T().LookForCustomAttribute(typeof(LazyLoadingAttribute));
-        this.LazyLoadingFields = foundProps.Select(x => x.Name).ToArray();
+        this.LazyLoadingFields = foundProps.Select(x => new LazyLoadingOptions {
+            Name = x.Name,
+            PrimaryKey = (x.GetCustomAttributes(true)
+                          .FirstOrDefault(y => y.GetType() == typeof(LazyLoadingAttribute)) as LazyLoadingAttribute).PrimaryKeyName
+        }).ToArray();
 
         if (foundProps.Count() > 0)
         {
@@ -242,7 +246,7 @@ namespace Biggy
           var vals = new List<string>();
           foreach (var ft in this.LazyLoadingFields)
           {
-              dict[ft] = itemdc[ft] == null ? "" : JsonConvert.SerializeObject(itemdc[ft]);
+              dict[ft.Name] = itemdc[ft.Name] == null ? "" : JsonConvert.SerializeObject(itemdc[ft.Name]);
           }
       }
       return expando;
@@ -287,12 +291,14 @@ namespace Biggy
             var vals = new List<string>();
             foreach (var ft in this.LazyLoadingFields)
             {
-                dict[ft] = itemdc[ft] == null ? "" : JsonConvert.SerializeObject(itemdc[ft]);
+                var updatedCollection = LazyLoadingHelper.Update(this.Model, itemdc[ft.Name] as ILazyLoadingCollection, 
+                                                                itemdc[ft.Name].GetType().GetGenericArguments()[0],
+                                                                ft.Name.ToLower(), ft.PrimaryKey, item);
+                dict[ft.Name] = itemdc[ft.Name] == null ? "" : updatedCollection;
             }
         }
         return expando;
     }
-
 
     public List<T> LoadAll() {
       var list = new List<T>();

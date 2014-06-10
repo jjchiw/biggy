@@ -9,7 +9,7 @@ namespace Biggy.Extensions
 {
     public static class ListExtensions
     {
-        public static void Load<T>(this LazyLoadingCollection<T> list, BiggyRelationalStore<dynamic> store, string property, int skip, int take, object parent)
+        public static void Load<T>(this LazyLoadingCollection<T> list, BiggyRelationalStore<dynamic> store, string property, int skip, int take, object parent) where T : new()
         {
             var where = store.BuildWherePrimarykey(parent);
             string sql = store.BuildSelect(where, "", take, skip);
@@ -28,7 +28,7 @@ namespace Biggy.Extensions
                 var scrunched = sb.ToString();
                 var stripped = scrunched.Substring(0, scrunched.Length - 1);
                 var json = string.Format("[{0}]", stripped);
-                list.AddRange(JsonConvert.DeserializeObject<List<T>>(json));
+                list.Add(JsonConvert.DeserializeObject<List<T>>(json));
             }
         }
     }

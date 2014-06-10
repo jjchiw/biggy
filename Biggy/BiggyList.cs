@@ -82,8 +82,8 @@ namespace Biggy {
         }
         // From here forward, the item passed in refers to the item in the list. 
       }
+      Fire(BeforeChanged, item: item);
       if (_store != null && !this.InMemory) {
-          Fire(BeforeChanged, item: item);
         _store.Update(item);
       } 
       Fire(Changed, item: item);
@@ -92,8 +92,8 @@ namespace Biggy {
 
     public virtual T Remove(T item) {
       _items.Remove(item);
+      Fire(BeforeItemRemoved, item: item);
       if (_store != null && !this.InMemory) {
-          Fire(BeforeItemRemoved, item: item);
         _store.Remove(item);
       }
       Fire(ItemRemoved, item: item);
@@ -102,9 +102,9 @@ namespace Biggy {
 
     public IList<T> Remove(List<T> items) {
       foreach (var item in items) {
-          Fire(BeforeItemsRemoved, items: items);
         _items.Remove(item);
       }
+      Fire(BeforeItemsRemoved, items: items);
       if (_store != null && !this.InMemory) {
         _store.Remove(items);
       }
@@ -113,8 +113,8 @@ namespace Biggy {
     }
 
     public virtual T Add(T item) {
+        Fire(BeforeItemAdded, item: item);
       if (_store != null && !this.InMemory) {
-          Fire(BeforeItemAdded, item: item);
         _store.Add(item);
       }
       _items.Add(item);
@@ -123,8 +123,8 @@ namespace Biggy {
     }
 
     public virtual IList<T> Add(List<T> items) {
-      if (_store != null && !this.InMemory) {
-          Fire(BeforeItemsAdded, items: items);
+        Fire(BeforeItemsAdded, items: items);
+        if (_store != null && !this.InMemory) {
         _store.Add(items);
       }
       _items.AddRange(items);

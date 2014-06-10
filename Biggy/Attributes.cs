@@ -29,6 +29,11 @@ namespace Biggy {
   }
 
   public class LazyLoadingAttribute : Attribute {
+      public string PrimaryKeyName { get; set; }
+      public LazyLoadingAttribute(string PrimaryKeyName)
+      {
+          this.PrimaryKeyName = PrimaryKeyName;
+      }
   }
 
 }
