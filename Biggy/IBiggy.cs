@@ -22,6 +22,12 @@ namespace Biggy
         event EventHandler<BiggyEventArgs<T>> Changed;
         event EventHandler<BiggyEventArgs<T>> Loaded;
         event EventHandler<BiggyEventArgs<T>> Saved;
+
+        event EventHandler<BiggyEventArgs<T>> BeforeItemRemoved;
+        event EventHandler<BiggyEventArgs<T>> BeforeItemAdded;
+        event EventHandler<BiggyEventArgs<T>> BeforeItemsAdded;
+
+        event EventHandler<BiggyEventArgs<T>> BeforeChanged;
     }
 
     public interface IQueryableBiggyList<T> : IBiggy<T> {

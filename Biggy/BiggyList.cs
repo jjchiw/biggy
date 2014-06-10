@@ -53,6 +53,7 @@ namespace Biggy {
 
     public virtual void Clear() {
       if (_store != null && !this.InMemory) {
+          Fire(BeforeChanged, items: null);
         _store.Clear();
       }
       _items.Clear();
@@ -82,6 +83,7 @@ namespace Biggy {
         // From here forward, the item passed in refers to the item in the list. 
       }
       if (_store != null && !this.InMemory) {
+          Fire(BeforeChanged, item: item);
         _store.Update(item);
       } 
       Fire(Changed, item: item);
@@ -91,6 +93,7 @@ namespace Biggy {
     public virtual T Remove(T item) {
       _items.Remove(item);
       if (_store != null && !this.InMemory) {
+          Fire(BeforeItemRemoved, item: item);
         _store.Remove(item);
       }
       Fire(ItemRemoved, item: item);
@@ -99,6 +102,7 @@ namespace Biggy {
 
     public IList<T> Remove(List<T> items) {
       foreach (var item in items) {
+          Fire(BeforeItemsRemoved, items: items);
         _items.Remove(item);
       }
       if (_store != null && !this.InMemory) {
@@ -110,6 +114,7 @@ namespace Biggy {
 
     public virtual T Add(T item) {
       if (_store != null && !this.InMemory) {
+          Fire(BeforeItemAdded, item: item);
         _store.Add(item);
       }
       _items.Add(item);
@@ -119,6 +124,7 @@ namespace Biggy {
 
     public virtual IList<T> Add(List<T> items) {
       if (_store != null && !this.InMemory) {
+          Fire(BeforeItemsAdded, items: items);
         _store.Add(items);
       }
       _items.AddRange(items);
@@ -145,5 +151,12 @@ namespace Biggy {
     public event EventHandler<BiggyEventArgs<T>> Changed;
     public event EventHandler<BiggyEventArgs<T>> Loaded;
     public event EventHandler<BiggyEventArgs<T>> Saved;
+
+    public event EventHandler<BiggyEventArgs<T>> BeforeItemRemoved;
+    public event EventHandler<BiggyEventArgs<T>> BeforeItemsRemoved;
+    public event EventHandler<BiggyEventArgs<T>> BeforeItemAdded;
+    public event EventHandler<BiggyEventArgs<T>> BeforeItemsAdded;
+
+    public event EventHandler<BiggyEventArgs<T>> BeforeChanged;
   }
 }
