@@ -120,11 +120,11 @@ namespace Tests.Postgres
             Assert.Equal(0, clown.Schedules.Count());
             Assert.Equal(3, clown.OtherNames.Count());
 
-            clown.Parties.Load<PartyDenormalized<PartyDocument>>(store.Model, "parties", 0, 2, clown);
+            clown.Parties.Load(store.Model, "parties", 0, 2, clown);
             
             Assert.Equal(2, clown.Parties.Count());
 
-            clown.Schedules.Load<Schedule>(store.Model, "schedules", 2, 1, clown);
+            clown.Schedules.Load(store.Model, "schedules", 2, 1, clown);
 
             Assert.Equal(1, clown.Schedules.Count());
             Assert.Equal("New Wig", clown.Schedules.FirstOrDefault().Name);
@@ -146,11 +146,11 @@ namespace Tests.Postgres
             Assert.Equal(0, clown.Schedules.Count());
             Assert.Equal(3, clown.OtherNames.Count);
 
-            clown.Parties.Load<PartyDenormalized<PartyDocument>>(store.Model, "parties", 0, 2, clown);
+            clown.Parties.Load(store.Model, "parties", 0, 2, clown);
 
             Assert.Equal(2, clown.Parties.Count());
 
-            clown.Schedules.Load<Schedule>(store.Model, "schedules", 2, 1, clown);
+            clown.Schedules.Load(store.Model, "schedules", 2, 1, clown);
 
             Assert.Equal(1, clown.Schedules.Count());
             Assert.Equal("New Wig", clown.Schedules.FirstOrDefault().Name);
@@ -165,6 +165,24 @@ namespace Tests.Postgres
             );
 
             _store.GetBiggyList<ClownDocument>().Update(clown);
+
+            clown.Schedules.Clear();
+            clown.Parties.Clear();
+
+            clown.Schedules.Load(store.Model, "schedules", 0, 0, clown);
+            Assert.Equal(4, clown.Schedules.Count());
+
+            clown.Parties.Load(store.Model, "parties", 0, 0, clown);
+            Assert.Equal(2, clown.Parties.Count());
+
+            clown.Parties.Remove(clown.Parties.FirstOrDefault());
+
+            _store.GetBiggyList<ClownDocument>().Update(clown);
+
+            clown.Parties.Clear();
+
+            clown.Parties.Load(store.Model, "parties", 0, 0, clown);
+            Assert.Equal(1, clown.Parties.Count());
         }
 
         private ClownDocument CreateClown()

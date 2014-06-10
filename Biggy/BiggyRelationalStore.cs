@@ -18,6 +18,7 @@ namespace Biggy {
     public abstract string GetSingleSelect(string delimitedTableName, string where);
     public abstract string BuildSelect(string where, string orderBy = "", int limit = 0);
     public abstract string BuildSelect(string where, string orderBy = "", int limit = 0, int offset = 0);
+    public abstract string BuildJsonSelect(string where, string property, int limit = 0, int offset = 0);
     public virtual  string ConnectionString { get { return this.Cache.ConnectionString; } }
     public DBTableMapping TableMapping { get; set; }
 

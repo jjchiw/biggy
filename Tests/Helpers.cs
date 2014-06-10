@@ -215,49 +215,49 @@ namespace Tests {
           };
       }
 
-      //public override bool Equals(System.Object obj)
-      //{
-      //    // If parameter cannot be cast to ThreeDPoint return false:
-      //    var p = obj as PartyDenormalized<T>;
-      //    if ((object)p == null)
-      //    {
-      //        return false;
-      //    }
+      public override bool Equals(System.Object obj)
+      {
+          // If parameter cannot be cast to ThreeDPoint return false:
+          var p = obj as PartyDenormalized<T>;
+          if ((object)p == null)
+          {
+              return false;
+          }
 
-      //    // Return true if the fields match:
-      //    return Id == p.Id;
-      //}
+          // Return true if the fields match:
+          return Id == p.Id;
+      }
 
-      //public bool Equals(PartyDenormalized<T> p)
-      //{
-      //    // Return true if the fields match:
-      //    return Id == p.Id;
-      //}
+      public bool Equals(PartyDenormalized<T> p)
+      {
+          // Return true if the fields match:
+          return Id == p.Id;
+      }
 
-      //public override int GetHashCode()
-      //{
-      //    return Id.GetHashCode();
-      //}
+      public override int GetHashCode()
+      {
+          return Id.GetHashCode();
+      }
 
-      //public static bool operator ==(PartyDenormalized<T> a, PartyDenormalized<T> b)
-      //{
-      //    return a.Equals(b);
-      //}
+      public static bool operator ==(PartyDenormalized<T> a, PartyDenormalized<T> b)
+      {
+          return a.Equals(b);
+      }
 
-      //public static bool operator !=(PartyDenormalized<T> a, PartyDenormalized<T> b)
-      //{
-      //    return !(a == b);
-      //}
+      public static bool operator !=(PartyDenormalized<T> a, PartyDenormalized<T> b)
+      {
+          return !(a == b);
+      }
 
-      //public static bool operator ==(PartyDenormalized<T> a, dynamic b)
-      //{
-      //    return a.Equals(b as PartyDenormalized<T>);
-      //}
+      public static bool operator ==(PartyDenormalized<T> a, dynamic b)
+      {
+          return a.Equals(b as PartyDenormalized<T>);
+      }
 
-      //public static bool operator !=(PartyDenormalized<T> a, dynamic b)
-      //{
-      //    return !(a == b);
-      //}
+      public static bool operator !=(PartyDenormalized<T> a, dynamic b)
+      {
+          return !(a == b);
+      }
   }
 
 }

@@ -85,5 +85,10 @@ namespace Biggy.SQLServer {
       }
       return removed;
     }
+
+    public override string BuildJsonSelect(string where, string property, int limit, int offset)
+    {
+        throw new NotImplementedException();
+    }
   }
 }

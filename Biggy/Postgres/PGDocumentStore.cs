@@ -284,5 +284,37 @@ namespace Biggy.Postgres {
       }
       return items;
     }
+
+    public override IEnumerable<dynamic> GetJsonFieldAsArray( string where,
+                                                             string property)
+    {
+        
+        
+        
+        string sql = this.Model.BuildSelect(where, "", 0, 0);
+        var query = string.Format(sql, "json_array_elements(" + property + ") as " + property, this.Model.TableMapping.DelimitedTableName);
+        return this.Model.Query(query);
+
+        //return JsonConvert.DeserializeObject((x as IDictionary<string, object>)[property] as string, collectionType).ToDictionary();
+
+        //var removedCollection = collection.Removed.Select(x => ObjectExtensions.ToDictionary(x) as IDictionary<string, object>).ToList();
+        //var addedCollection = collection.Added.Select(x => ObjectExtensions.ToDictionary(x) as IDictionary<string, object>).ToList();
+
+        //var updatedListAfterDelete = queryResults.Where(x => !removedCollection.Any(y => y[primarykeyName].Equals(x[primarykeyName]))).ToList();
+        //var updatedAddedWithDelete = addedCollection.Where(x => !removedCollection.Any(y => y[primarykeyName].Equals(x[primarykeyName]))).ToList();
+
+        //var yaya = updatedListAfterDelete.Select(x => x[primarykeyName]).ToList();
+        //var yeye = updatedAddedWithDelete.Select(x => x[primarykeyName]).ToList();
+
+
+        //var similars = updatedListAfterDelete.Where(x => updatedAddedWithDelete.Any(y => y[primarykeyName].Equals(x[primarykeyName]))).ToList();
+        //var different1 = updatedListAfterDelete.Where(x => !updatedAddedWithDelete.Any(y => y[primarykeyName].Equals(x[primarykeyName]))).ToList();
+        //var different2 = updatedAddedWithDelete.Where(x => !updatedListAfterDelete.Any(y => y[primarykeyName].Equals(x[primarykeyName]))).ToList();
+
+        //var result = similars.Concat(different1).Concat(different2).ToList();
+
+        //return JsonConvert.SerializeObject(result);
+
+    }
   }
 }

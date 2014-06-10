@@ -280,5 +280,10 @@ namespace Biggy.SQLServer {
       }
       return items;
     }
+
+    public override IEnumerable<dynamic> GetJsonFieldAsArray(string where, string property)
+    {
+        throw new NotImplementedException();
+    }
   }
 }

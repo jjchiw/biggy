@@ -18,6 +18,7 @@ namespace Biggy
     public abstract List<T> Delete(List<T> items);
     protected abstract List<T> TryLoadData();
     public abstract BiggyRelationalStore<dynamic> getModel();
+    public abstract IEnumerable<dynamic> GetJsonFieldAsArray(string where, string property);
 
     public string[] FullTextFields { get; set; }
     internal LazyLoadingOptions[] LazyLoadingFields { get; set; }
@@ -291,9 +292,9 @@ namespace Biggy
             var vals = new List<string>();
             foreach (var ft in this.LazyLoadingFields)
             {
-                var updatedCollection = LazyLoadingHelper.Update(this.Model, itemdc[ft.Name] as ILazyLoadingCollection, 
-                                                                itemdc[ft.Name].GetType().GetGenericArguments()[0],
-                                                                ft.Name.ToLower(), ft.PrimaryKey, item);
+                var updatedCollection = UpdateLazyLoadingRelation(item, ft.Name.ToLower(), itemdc[ft.Name].GetType().GetGenericArguments()[0], 
+                                                                  itemdc[ft.Name] as ILazyLoadingCollection, ft.PrimaryKey);
+
                 dict[ft.Name] = itemdc[ft.Name] == null ? "" : updatedCollection;
             }
         }
@@ -346,6 +347,28 @@ namespace Biggy
 
     IList<T> IBiggyStore<T>.Remove(List<T> items) {
       return this.Delete(items.ToList());
+    }
+
+    private string UpdateLazyLoadingRelation(object parent, string property, Type collectionType, ILazyLoadingCollection collection, string primaryKeyName)
+    {
+        var where = this.Model.BuildWherePrimarykey(parent);
+        var jsonAsArray = this.GetJsonFieldAsArray(where, property);
+
+        var queryResults = jsonAsArray.Select(x => JsonConvert.DeserializeObject((x as IDictionary<string, object>)[property] as string, collectionType).ToDictionary());
+
+        var removedCollection = collection.Removed.Select(x => ObjectExtensions.ToDictionary(x) as IDictionary<string, object>).ToList();
+        var addedCollection = collection.Added.Select(x => ObjectExtensions.ToDictionary(x) as IDictionary<string, object>).ToList();
+
+        var updatedListAfterDelete = queryResults.Where(x => !removedCollection.Any(y => y[primaryKeyName].Equals(x[primaryKeyName]))).ToList();
+        var updatedAddedWithDelete = addedCollection.Where(x => !removedCollection.Any(y => y[primaryKeyName].Equals(x[primaryKeyName]))).ToList();
+
+        var similars = updatedListAfterDelete.Where(x => updatedAddedWithDelete.Any(y => y[primaryKeyName].Equals(x[primaryKeyName]))).ToList();
+        var different1 = updatedListAfterDelete.Where(x => !updatedAddedWithDelete.Any(y => y[primaryKeyName].Equals(x[primaryKeyName]))).ToList();
+        var different2 = updatedAddedWithDelete.Where(x => !updatedListAfterDelete.Any(y => y[primaryKeyName].Equals(x[primaryKeyName]))).ToList();
+
+        var result = similars.Concat(different1).Concat(different2).ToList();
+
+        return JsonConvert.SerializeObject(result);
     }
   }
 }

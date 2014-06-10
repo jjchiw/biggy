@@ -51,5 +51,11 @@ namespace Biggy.Postgres
       }
       return sql;
     }
+
+    public override string BuildJsonSelect(string where, string property, int limit, int offset)
+    {
+        var select = BuildSelect(where, "", limit, offset);
+        return string.Format(select, "json_array_elements(" + property + ") as " + property, TableMapping.DelimitedTableName);
+    }
   }
 }
