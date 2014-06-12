@@ -4,6 +4,7 @@ using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Biggy.Extensions;
 
 namespace Biggy.SqlCe {
   public class SqlCeStore<T> : Biggy.SQLServer.SQLServerStore<T> where T : new() {
@@ -68,7 +69,7 @@ namespace Biggy.SqlCe {
 
         DbCommand newIdQuery = null;
         if (pkMap.IsAutoIncementing) {
-          newIdQuery = this.CreateCommand("select @@Identity", conn);
+          newIdQuery = conn.CreateCommand("select @@Identity");
           newIdQuery.Transaction = tx;
         }
 

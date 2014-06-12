@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Biggy.Extensions;
 
 namespace Biggy.SqlCe {
   public class SqlCeDocumentStore<T> : SQLServer.SQLDocumentStore<T> where T : new() {
@@ -46,9 +47,9 @@ namespace Biggy.SqlCe {
       using (var conn = Model.Cache.OpenConnection())
       using (var tx = conn.BeginTransaction()) {
         // prepare commands
-        var newIdQuery = Model.CreateCommand("select @@Identity", conn);
+          var newIdQuery = conn.CreateCommand("select @@Identity");
         // we'll need update command only if Pk is auto-inc, so we'd need to update doc's body
-        var updateCmd = Model.CreateCommand(updateSql, conn, "body-stub", 0);
+        var updateCmd = conn.CreateCommand(updateSql, "body-stub", 0);
 
         insertCmd.Connection = conn;
         newIdQuery.Transaction = insertCmd.Transaction = updateCmd.Transaction = tx;
