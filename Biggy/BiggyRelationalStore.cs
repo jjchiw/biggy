@@ -273,7 +273,7 @@ namespace Biggy {
     /// </summary>
     public IEnumerable<dynamic> Query(string sql, params object[] args) {
       using (var conn = Cache.OpenConnection()) {
-        var rdr = this.CreateCommand(sql, conn, args).ExecuteReader();
+        var rdr = conn.CreateCommand(sql, args).ExecuteReader();
         while (rdr.Read()) {
           var expando = rdr.RecordToExpando();
           yield return expando;
@@ -286,7 +286,7 @@ namespace Biggy {
     /// </summary>
     public virtual IEnumerable<T> Query<T>(string sql, params object[] args) where T : new() {
       using (var conn = Cache.OpenConnection()) {
-        var rdr = this.CreateCommand(sql, conn, args).ExecuteReader();
+        var rdr = conn.CreateCommand(sql, args).ExecuteReader();
         while (rdr.Read()) {
           yield return this.MapReaderToObject<T>(rdr);
         }
@@ -294,7 +294,7 @@ namespace Biggy {
     }
 
     public virtual IEnumerable<T> Query<T>(string sql, DbConnection connection, params object[] args) where T : new() {
-      using (var rdr = this.CreateCommand(sql, connection, args).ExecuteReader()) {
+      using (var rdr = connection.CreateCommand(sql, args).ExecuteReader()) {
         while (rdr.Read()) {
           yield return this.MapReaderToObject<T>(rdr);
         }
@@ -324,7 +324,7 @@ namespace Biggy {
       var sbKeys = new StringBuilder();
       var sbVals = new StringBuilder();
       var stub = "INSERT INTO {0} ({1}) \r\n VALUES ({2})";
-      result = this.CreateCommand(stub, conn);
+      result = conn.CreateCommand(stub);
       int counter = 0;
 
       var autoPkColumn = this.TableMapping.PrimaryKeyMapping.FirstOrDefault(c => c.IsAutoIncementing == true);
@@ -368,7 +368,7 @@ namespace Biggy {
       var sbKeys = new StringBuilder();
       var stub = "UPDATE {0} SET {1}{2}";
       //var args = new List<object>();
-      var result = this.CreateCommand(stub, conn);
+      var result = conn.CreateCommand(stub);
       int counter = 0;
 
       var pkPropertNames = from n in this.TableMapping.PrimaryKeyMapping select n.PropertyName;
@@ -421,7 +421,7 @@ namespace Biggy {
       else if (!string.IsNullOrEmpty(where)) {
         sql += where.Trim().StartsWith("where", StringComparison.OrdinalIgnoreCase) ? where : "WHERE " + where;
       }
-      return this.CreateCommand(sql, null, args);
+      return this.CreateCommand(sql, args);
     }
 
     //public virtual object GetPrimaryKey(object o) {
@@ -501,17 +501,19 @@ namespace Biggy {
     /// <summary>
     /// Creates a DBCommand that you can use for loving your database.
     /// </summary>
-    public DbCommand CreateCommand(string sql, DbConnection conn, params object[] args) {
-      bool isNewConnection = conn == null;
-      conn = conn ?? OpenConnection();
-      var result = (DbCommand)conn.CreateCommand();
-      result.CommandText = sql;
-      if (args.Length > 0) {
-        result.AddParams(args);
-      }
-      if (isNewConnection)
-          conn.Close();
-      return result;
+    public DbCommand CreateCommand(string sql, params object[] args)
+    {
+        using(var conn = OpenConnection())
+        {
+            var result = (DbCommand)conn.CreateCommand();
+            result.CommandText = sql;
+            if (args.Length > 0)
+            {
+                result.AddParams(args);
+            }
+            return result;
+        }
+        
     }
 
     /// <summary>
@@ -520,7 +522,7 @@ namespace Biggy {
     public object Scalar(string sql, params object[] args) {
       object result = null;
       using (var conn = OpenConnection()) {
-        result = CreateCommand(sql, conn, args).ExecuteScalar();
+          result = conn.CreateCommand(sql, args).ExecuteScalar();
       }
       return result;
     }
@@ -601,7 +603,7 @@ namespace Biggy {
     }
 
     public int Execute(string sql, params object[] args) {
-      return Execute(CreateCommand(sql, null, args));
+      return Execute(CreateCommand(sql, args));
     }
 
     /// <summary>

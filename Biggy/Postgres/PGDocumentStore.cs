@@ -121,7 +121,7 @@ namespace Biggy.Postgres {
           var commands = new List<DbCommand>();
           // Lock the table, so nothing will disrupt the pk sequence:
           string lockTableSQL = string.Format("LOCK TABLE {0} in ACCESS EXCLUSIVE MODE", this.TableMapping.DelimitedTableName);
-          DbCommand dbCommand = this.Model.CreateCommand(lockTableSQL, connection);
+          DbCommand dbCommand = connection.CreateCommand(lockTableSQL);
           dbCommand.Transaction = tdbTransaction;
           dbCommand.ExecuteNonQuery();
           var autoPkColumn = this.TableMapping.PrimaryKeyMapping.FirstOrDefault(c => c.IsAutoIncementing == true);
@@ -175,7 +175,7 @@ namespace Biggy.Postgres {
                 sbSql = new StringBuilder(insertClause);
                 paramCounter = 0;
                 rowValueCounter = 0;
-                dbCommand = this.Model.CreateCommand("", connection);
+                dbCommand = connection.CreateCommand("");
                 dbCommand.Transaction = tdbTransaction;
               }
               if (key == "search") {
