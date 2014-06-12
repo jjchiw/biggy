@@ -44,7 +44,7 @@ namespace Biggy {
     public virtual T Insert(T item) {
       if(this.BeforeSave(item)) {
         using (var conn = Cache.OpenConnection()) {
-          var cmd = (DbCommand)this.CreateInsertCommand(item);
+          var cmd = (DbCommand)this.CreateInsertCommand(item, conn);
           if (!this.TableMapping.HasCompoundPk && this.TableMapping.PrimaryKeyMapping[0].IsAutoIncementing) {
             cmd.CommandText += this.GetInsertReturnValueSQL(this.TableMapping.PrimaryKeyMapping[0].DelimitedColumnName);
             var newId = cmd.ExecuteScalar();
@@ -64,7 +64,7 @@ namespace Biggy {
       var result = 0;
       if(BeforeSave(item)) {
         using (var conn = Cache.OpenConnection()) {
-          var cmd = (DbCommand)CreateUpdateCommand(item);
+          var cmd = (DbCommand)CreateUpdateCommand(item, conn);
           result = cmd.ExecuteNonQuery();
         }
       }
@@ -317,14 +317,14 @@ namespace Biggy {
       return item;
     }
 
-    public virtual DbCommand CreateInsertCommand(T insertItem) {
+    public virtual DbCommand CreateInsertCommand(T insertItem, DbConnection conn) {
       DbCommand result = null;
       var expando = insertItem.ToExpando();
       var settings = (IDictionary<string, object>)expando;
       var sbKeys = new StringBuilder();
       var sbVals = new StringBuilder();
       var stub = "INSERT INTO {0} ({1}) \r\n VALUES ({2})";
-      result = this.CreateCommand(stub, null);
+      result = this.CreateCommand(stub, conn);
       int counter = 0;
 
       var autoPkColumn = this.TableMapping.PrimaryKeyMapping.FirstOrDefault(c => c.IsAutoIncementing == true);
@@ -362,13 +362,13 @@ namespace Biggy {
     /// <summary>
     /// Creates a command for use with transactions - internal stuff mostly, but here for you to play with
     /// </summary>
-    public virtual DbCommand CreateUpdateCommand(T updateItem) {
+    public virtual DbCommand CreateUpdateCommand(T updateItem, DbConnection conn) {
       var expando = updateItem.ToExpando();
       var settings = (IDictionary<string, object>)expando;
       var sbKeys = new StringBuilder();
       var stub = "UPDATE {0} SET {1}{2}";
       //var args = new List<object>();
-      var result = this.CreateCommand(stub, null);
+      var result = this.CreateCommand(stub, conn);
       int counter = 0;
 
       var pkPropertNames = from n in this.TableMapping.PrimaryKeyMapping select n.PropertyName;
@@ -482,9 +482,9 @@ namespace Biggy {
       var commands = new List<DbCommand>();
       foreach (var item in things) {
         if (this.HasPrimaryKey(item)) {
-          commands.Add(CreateUpdateCommand(item));
+          commands.Add(CreateUpdateCommand(item, null));
         } else {
-          commands.Add(CreateInsertCommand(item.ToExpando()));
+          commands.Add(CreateInsertCommand(item.ToExpando(), null));
         }
       }
       return commands;
@@ -502,12 +502,15 @@ namespace Biggy {
     /// Creates a DBCommand that you can use for loving your database.
     /// </summary>
     public DbCommand CreateCommand(string sql, DbConnection conn, params object[] args) {
+      bool isNewConnection = conn == null;
       conn = conn ?? OpenConnection();
       var result = (DbCommand)conn.CreateCommand();
       result.CommandText = sql;
       if (args.Length > 0) {
         result.AddParams(args);
       }
+      if (isNewConnection)
+          conn.Close();
       return result;
     }
 
