@@ -26,9 +26,9 @@ namespace Biggy.SqlCe {
     public override T Insert(T item) {
       if (BeforeSave(item)) {
         object newId = null;
-        var cmd = (DbCommand)this.CreateInsertCommand(item);
+        var cmd = (DbCommand)this.CreateInsertCommand(item, null);
 
-        using (var conn = cmd.Connection)
+        using (var conn = OpenConnection())
         using (var tx = conn.BeginTransaction()) {
           cmd.Transaction = tx;
           int rowsCnt = cmd.ExecuteNonQuery();
@@ -59,10 +59,10 @@ namespace Biggy.SqlCe {
       var pkMap = dbtmap.PrimaryKeyMapping.First();//HACK: Now everywhere is assumed there is single column Pk
 
       var first = items.First();
-      var insertCmd = this.CreateInsertCommand(first);
+      var insertCmd = this.CreateInsertCommand(first, null);
 
       // Reuse a connection and commands object, SqlCe has a limit of open sessions
-      using (var conn = insertCmd.Connection)
+      using (var conn = OpenConnection())
       using (var tx = conn.BeginTransaction()) {
         insertCmd.Transaction = tx;
 

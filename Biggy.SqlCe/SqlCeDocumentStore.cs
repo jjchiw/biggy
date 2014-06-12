@@ -36,7 +36,7 @@ namespace Biggy.SqlCe {
       var expando = SetDataForDocument(first);
 
       var pkMap = Model.TableMapping.PrimaryKeyMapping.Single();  //TODO: compound Pk not supported
-      var insertCmd = Model.CreateInsertCommand(expando);
+      var insertCmd = Model.CreateInsertCommand(expando, null);
       var updateSql = string.Format("update {0} set [body] = @0 where {1} = @1",
                   Model.TableMapping.DelimitedTableName, pkMap.DelimitedColumnName);
 
