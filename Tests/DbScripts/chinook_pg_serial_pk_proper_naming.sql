@@ -1,4 +1,4 @@
-
+﻿
 /*******************************************************************************
    Chinook Database - Version 1.4
    Script: Chinook_PostgreSql.sql
@@ -139,6 +139,14 @@ SELECT setval('"public"."track_track_id_seq"', 3503, true);
 /*******************************************************************************
    Create Tables
 ********************************************************************************/
+CREATE TABLE widget
+(
+  sku character varying(160) NOT NULL,
+  name character varying(160) NOT NULL,
+  price numeric,
+  CONSTRAINT pk_widget PRIMARY KEY (sku)
+);
+
 CREATE TABLE album
 (
     album_id int DEFAULT nextval('album_album_id_seq'::regclass) NOT NULL,
