@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio Express 2013 for Windows
 VisualStudioVersion = 12.0.30324.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BiggySamples.Core", "BiggySamples.Core\BiggySamples.Core.csproj", "{173285D5-17D4-4624-968D-BBA03F29F48D}"
@@ -12,8 +12,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Biggy.Mobile", "..\Biggy.Mobile.Core\Biggy.Mobile.csproj", "{2E9D0AF5-410F-47EB-9767-C3A04FD5F96C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Biggy.Mobile.WP8", "..\Biggy.Mobile.WP8\Biggy.Mobile.WP8.csproj", "{B86BE15B-A69F-41FF-81A8-6DBDECE43458}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Biggy.Mobile.Droid", "..\Biggy.Mobile.Droid\Biggy.Mobile.Droid.csproj", "{3D65ED91-B172-43C1-8534-5F6951DE9324}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,38 +31,6 @@ Global
 		{173285D5-17D4-4624-968D-BBA03F29F48D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{173285D5-17D4-4624-968D-BBA03F29F48D}.Release|ARM.ActiveCfg = Release|Any CPU
 		{173285D5-17D4-4624-968D-BBA03F29F48D}.Release|x86.ActiveCfg = Release|Any CPU
-		{2E9D0AF5-410F-47EB-9767-C3A04FD5F96C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2E9D0AF5-410F-47EB-9767-C3A04FD5F96C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2E9D0AF5-410F-47EB-9767-C3A04FD5F96C}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{2E9D0AF5-410F-47EB-9767-C3A04FD5F96C}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{2E9D0AF5-410F-47EB-9767-C3A04FD5F96C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2E9D0AF5-410F-47EB-9767-C3A04FD5F96C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2E9D0AF5-410F-47EB-9767-C3A04FD5F96C}.Release|ARM.ActiveCfg = Release|Any CPU
-		{2E9D0AF5-410F-47EB-9767-C3A04FD5F96C}.Release|x86.ActiveCfg = Release|Any CPU
-		{3D65ED91-B172-43C1-8534-5F6951DE9324}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3D65ED91-B172-43C1-8534-5F6951DE9324}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3D65ED91-B172-43C1-8534-5F6951DE9324}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{3D65ED91-B172-43C1-8534-5F6951DE9324}.Debug|ARM.Build.0 = Debug|Any CPU
-		{3D65ED91-B172-43C1-8534-5F6951DE9324}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{3D65ED91-B172-43C1-8534-5F6951DE9324}.Debug|x86.Build.0 = Debug|Any CPU
-		{3D65ED91-B172-43C1-8534-5F6951DE9324}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3D65ED91-B172-43C1-8534-5F6951DE9324}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3D65ED91-B172-43C1-8534-5F6951DE9324}.Release|ARM.ActiveCfg = Release|Any CPU
-		{3D65ED91-B172-43C1-8534-5F6951DE9324}.Release|ARM.Build.0 = Release|Any CPU
-		{3D65ED91-B172-43C1-8534-5F6951DE9324}.Release|x86.ActiveCfg = Release|Any CPU
-		{3D65ED91-B172-43C1-8534-5F6951DE9324}.Release|x86.Build.0 = Release|Any CPU
-		{B86BE15B-A69F-41FF-81A8-6DBDECE43458}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B86BE15B-A69F-41FF-81A8-6DBDECE43458}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B86BE15B-A69F-41FF-81A8-6DBDECE43458}.Debug|ARM.ActiveCfg = Debug|ARM
-		{B86BE15B-A69F-41FF-81A8-6DBDECE43458}.Debug|ARM.Build.0 = Debug|ARM
-		{B86BE15B-A69F-41FF-81A8-6DBDECE43458}.Debug|x86.ActiveCfg = Debug|x86
-		{B86BE15B-A69F-41FF-81A8-6DBDECE43458}.Debug|x86.Build.0 = Debug|x86
-		{B86BE15B-A69F-41FF-81A8-6DBDECE43458}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B86BE15B-A69F-41FF-81A8-6DBDECE43458}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B86BE15B-A69F-41FF-81A8-6DBDECE43458}.Release|ARM.ActiveCfg = Release|ARM
-		{B86BE15B-A69F-41FF-81A8-6DBDECE43458}.Release|ARM.Build.0 = Release|ARM
-		{B86BE15B-A69F-41FF-81A8-6DBDECE43458}.Release|x86.ActiveCfg = Release|x86
-		{B86BE15B-A69F-41FF-81A8-6DBDECE43458}.Release|x86.Build.0 = Release|x86
 		{D0A82C21-E3C0-44E0-801D-EDF261FC5D4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D0A82C21-E3C0-44E0-801D-EDF261FC5D4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D0A82C21-E3C0-44E0-801D-EDF261FC5D4B}.Debug|ARM.ActiveCfg = Debug|Any CPU
@@ -91,11 +57,31 @@ Global
 		{EB76DB39-A237-441A-BB4F-D2773580BFDA}.Release|x86.ActiveCfg = Release|x86
 		{EB76DB39-A237-441A-BB4F-D2773580BFDA}.Release|x86.Build.0 = Release|x86
 		{EB76DB39-A237-441A-BB4F-D2773580BFDA}.Release|x86.Deploy.0 = Release|x86
-	EndGlobalSection
-	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = Biggy.UI.Droid\Biggy.UI.Droid.csproj
+		{2E9D0AF5-410F-47EB-9767-C3A04FD5F96C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E9D0AF5-410F-47EB-9767-C3A04FD5F96C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E9D0AF5-410F-47EB-9767-C3A04FD5F96C}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{2E9D0AF5-410F-47EB-9767-C3A04FD5F96C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2E9D0AF5-410F-47EB-9767-C3A04FD5F96C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E9D0AF5-410F-47EB-9767-C3A04FD5F96C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E9D0AF5-410F-47EB-9767-C3A04FD5F96C}.Release|ARM.ActiveCfg = Release|Any CPU
+		{2E9D0AF5-410F-47EB-9767-C3A04FD5F96C}.Release|x86.ActiveCfg = Release|Any CPU
+		{B86BE15B-A69F-41FF-81A8-6DBDECE43458}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B86BE15B-A69F-41FF-81A8-6DBDECE43458}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B86BE15B-A69F-41FF-81A8-6DBDECE43458}.Debug|ARM.ActiveCfg = Debug|ARM
+		{B86BE15B-A69F-41FF-81A8-6DBDECE43458}.Debug|ARM.Build.0 = Debug|ARM
+		{B86BE15B-A69F-41FF-81A8-6DBDECE43458}.Debug|x86.ActiveCfg = Debug|x86
+		{B86BE15B-A69F-41FF-81A8-6DBDECE43458}.Debug|x86.Build.0 = Debug|x86
+		{B86BE15B-A69F-41FF-81A8-6DBDECE43458}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B86BE15B-A69F-41FF-81A8-6DBDECE43458}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B86BE15B-A69F-41FF-81A8-6DBDECE43458}.Release|ARM.ActiveCfg = Release|ARM
+		{B86BE15B-A69F-41FF-81A8-6DBDECE43458}.Release|ARM.Build.0 = Release|ARM
+		{B86BE15B-A69F-41FF-81A8-6DBDECE43458}.Release|x86.ActiveCfg = Release|x86
+		{B86BE15B-A69F-41FF-81A8-6DBDECE43458}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Biggy.UI.Droid\Biggy.UI.Droid.csproj
 	EndGlobalSection
 EndGlobal
