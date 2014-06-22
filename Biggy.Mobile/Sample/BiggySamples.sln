@@ -1,0 +1,101 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+VisualStudioVersion = 12.0.30324.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BiggySamples.Core", "BiggySamples.Core\BiggySamples.Core.csproj", "{173285D5-17D4-4624-968D-BBA03F29F48D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Biggy.UI.Droid", "Biggy.UI.Droid\Biggy.UI.Droid.csproj", "{D0A82C21-E3C0-44E0-801D-EDF261FC5D4B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Biggy.UI.WP8", "Biggy.UI.WP8\Biggy.UI.WP8.csproj", "{EB76DB39-A237-441A-BB4F-D2773580BFDA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Biggy.Mobile", "..\Biggy.Mobile.Core\Biggy.Mobile.csproj", "{2E9D0AF5-410F-47EB-9767-C3A04FD5F96C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Biggy.Mobile.WP8", "..\Biggy.Mobile.WP8\Biggy.Mobile.WP8.csproj", "{B86BE15B-A69F-41FF-81A8-6DBDECE43458}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Biggy.Mobile.Droid", "..\Biggy.Mobile.Droid\Biggy.Mobile.Droid.csproj", "{3D65ED91-B172-43C1-8534-5F6951DE9324}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|ARM = Debug|ARM
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|ARM = Release|ARM
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{173285D5-17D4-4624-968D-BBA03F29F48D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{173285D5-17D4-4624-968D-BBA03F29F48D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{173285D5-17D4-4624-968D-BBA03F29F48D}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{173285D5-17D4-4624-968D-BBA03F29F48D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{173285D5-17D4-4624-968D-BBA03F29F48D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{173285D5-17D4-4624-968D-BBA03F29F48D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{173285D5-17D4-4624-968D-BBA03F29F48D}.Release|ARM.ActiveCfg = Release|Any CPU
+		{173285D5-17D4-4624-968D-BBA03F29F48D}.Release|x86.ActiveCfg = Release|Any CPU
+		{2E9D0AF5-410F-47EB-9767-C3A04FD5F96C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E9D0AF5-410F-47EB-9767-C3A04FD5F96C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E9D0AF5-410F-47EB-9767-C3A04FD5F96C}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{2E9D0AF5-410F-47EB-9767-C3A04FD5F96C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2E9D0AF5-410F-47EB-9767-C3A04FD5F96C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E9D0AF5-410F-47EB-9767-C3A04FD5F96C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E9D0AF5-410F-47EB-9767-C3A04FD5F96C}.Release|ARM.ActiveCfg = Release|Any CPU
+		{2E9D0AF5-410F-47EB-9767-C3A04FD5F96C}.Release|x86.ActiveCfg = Release|Any CPU
+		{3D65ED91-B172-43C1-8534-5F6951DE9324}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D65ED91-B172-43C1-8534-5F6951DE9324}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D65ED91-B172-43C1-8534-5F6951DE9324}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{3D65ED91-B172-43C1-8534-5F6951DE9324}.Debug|ARM.Build.0 = Debug|Any CPU
+		{3D65ED91-B172-43C1-8534-5F6951DE9324}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3D65ED91-B172-43C1-8534-5F6951DE9324}.Debug|x86.Build.0 = Debug|Any CPU
+		{3D65ED91-B172-43C1-8534-5F6951DE9324}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D65ED91-B172-43C1-8534-5F6951DE9324}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D65ED91-B172-43C1-8534-5F6951DE9324}.Release|ARM.ActiveCfg = Release|Any CPU
+		{3D65ED91-B172-43C1-8534-5F6951DE9324}.Release|ARM.Build.0 = Release|Any CPU
+		{3D65ED91-B172-43C1-8534-5F6951DE9324}.Release|x86.ActiveCfg = Release|Any CPU
+		{3D65ED91-B172-43C1-8534-5F6951DE9324}.Release|x86.Build.0 = Release|Any CPU
+		{B86BE15B-A69F-41FF-81A8-6DBDECE43458}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B86BE15B-A69F-41FF-81A8-6DBDECE43458}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B86BE15B-A69F-41FF-81A8-6DBDECE43458}.Debug|ARM.ActiveCfg = Debug|ARM
+		{B86BE15B-A69F-41FF-81A8-6DBDECE43458}.Debug|ARM.Build.0 = Debug|ARM
+		{B86BE15B-A69F-41FF-81A8-6DBDECE43458}.Debug|x86.ActiveCfg = Debug|x86
+		{B86BE15B-A69F-41FF-81A8-6DBDECE43458}.Debug|x86.Build.0 = Debug|x86
+		{B86BE15B-A69F-41FF-81A8-6DBDECE43458}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B86BE15B-A69F-41FF-81A8-6DBDECE43458}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B86BE15B-A69F-41FF-81A8-6DBDECE43458}.Release|ARM.ActiveCfg = Release|ARM
+		{B86BE15B-A69F-41FF-81A8-6DBDECE43458}.Release|ARM.Build.0 = Release|ARM
+		{B86BE15B-A69F-41FF-81A8-6DBDECE43458}.Release|x86.ActiveCfg = Release|x86
+		{B86BE15B-A69F-41FF-81A8-6DBDECE43458}.Release|x86.Build.0 = Release|x86
+		{D0A82C21-E3C0-44E0-801D-EDF261FC5D4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0A82C21-E3C0-44E0-801D-EDF261FC5D4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0A82C21-E3C0-44E0-801D-EDF261FC5D4B}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{D0A82C21-E3C0-44E0-801D-EDF261FC5D4B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D0A82C21-E3C0-44E0-801D-EDF261FC5D4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0A82C21-E3C0-44E0-801D-EDF261FC5D4B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0A82C21-E3C0-44E0-801D-EDF261FC5D4B}.Release|ARM.ActiveCfg = Release|Any CPU
+		{D0A82C21-E3C0-44E0-801D-EDF261FC5D4B}.Release|x86.ActiveCfg = Release|Any CPU
+		{EB76DB39-A237-441A-BB4F-D2773580BFDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB76DB39-A237-441A-BB4F-D2773580BFDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB76DB39-A237-441A-BB4F-D2773580BFDA}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{EB76DB39-A237-441A-BB4F-D2773580BFDA}.Debug|ARM.ActiveCfg = Debug|ARM
+		{EB76DB39-A237-441A-BB4F-D2773580BFDA}.Debug|ARM.Build.0 = Debug|ARM
+		{EB76DB39-A237-441A-BB4F-D2773580BFDA}.Debug|ARM.Deploy.0 = Debug|ARM
+		{EB76DB39-A237-441A-BB4F-D2773580BFDA}.Debug|x86.ActiveCfg = Debug|x86
+		{EB76DB39-A237-441A-BB4F-D2773580BFDA}.Debug|x86.Build.0 = Debug|x86
+		{EB76DB39-A237-441A-BB4F-D2773580BFDA}.Debug|x86.Deploy.0 = Debug|x86
+		{EB76DB39-A237-441A-BB4F-D2773580BFDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB76DB39-A237-441A-BB4F-D2773580BFDA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB76DB39-A237-441A-BB4F-D2773580BFDA}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{EB76DB39-A237-441A-BB4F-D2773580BFDA}.Release|ARM.ActiveCfg = Release|ARM
+		{EB76DB39-A237-441A-BB4F-D2773580BFDA}.Release|ARM.Build.0 = Release|ARM
+		{EB76DB39-A237-441A-BB4F-D2773580BFDA}.Release|ARM.Deploy.0 = Release|ARM
+		{EB76DB39-A237-441A-BB4F-D2773580BFDA}.Release|x86.ActiveCfg = Release|x86
+		{EB76DB39-A237-441A-BB4F-D2773580BFDA}.Release|x86.Build.0 = Release|x86
+		{EB76DB39-A237-441A-BB4F-D2773580BFDA}.Release|x86.Deploy.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Biggy.UI.Droid\Biggy.UI.Droid.csproj
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

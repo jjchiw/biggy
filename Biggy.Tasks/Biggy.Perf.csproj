@@ -59,7 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Biggy\Biggy.csproj">
-      <Project>{49dbd996-032d-4b58-b35a-2621da0eaeaf}</Project>
+      <Project>{49DBD996-032D-4B58-B35A-2621DA0EAEAF}</Project>
       <Name>Biggy</Name>
     </ProjectReference>
   </ItemGroup>

@@ -1,0 +1,32 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Biggy.Mobile\Biggy.Mobile.Droid\JSON\JsonStore.cs">
+    <Files>
+      <File FileName="c:\Users\JuanJ\Documents\GitHub\biggy\Biggy\BiggyList.cs" Line="38" Column="2" />
+      <File FileName="Biggy.Mobile\Biggy.Mobile.Droid\JSON\JsonStore.cs" Line="240" Column="21" />
+      <File FileName="Biggy\JSON\JsonStore.cs" Line="48" Column="1" />
+      <File FileName="Biggy\JSON\BiggyListSerializer.cs" Line="6" Column="3" />
+      <File FileName="Biggy\IBiggyStore.cs" Line="6" Column="3" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State expanded="True">
+          <Node name="Biggy" expanded="True">
+            <Node name="JSON" expanded="True" />
+          </Node>
+          <Node name="Biggy.Mobile" selected="True" />
+          <Node name="Biggy.Mobile.Droid" expanded="True">
+            <Node name="JSON" expanded="True" />
+          </Node>
+          <Node name="Tests" expanded="True">
+            <Node name="Postgres" expanded="True" />
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>

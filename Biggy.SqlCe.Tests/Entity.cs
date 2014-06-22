@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace Biggy.SqlCe.Tests {
   class Album {
-    [PrimaryKey, DbColumn("AlbumId")]
+	[PrimaryKey(true), DbColumn("AlbumId")]
     public int Id { get; set; }
     public string Title { get; set; }
     public int ArtistId { get; set; }
   }
 
   class Artist {
-    [PrimaryKey]
+	[PrimaryKey(true)]
     public int ArtistId { get; set; }
     public string Name { get; set; }
   }
@@ -25,7 +25,7 @@ namespace Biggy.SqlCe.Tests {
   }
 
   class Employee {
-    [PrimaryKey]
+	[PrimaryKey(true)]
     public int EmployeeId { get; set; }
     public string LastName { get; set; }
     public string FirstName { get; set; }
@@ -45,7 +45,7 @@ namespace Biggy.SqlCe.Tests {
   }
 
   class Client {
-    [PrimaryKey]
+	[PrimaryKey(true)]
     public int ClientId { get; set; }
     public string LastName { get; set; }
     public string FirstName { get; set; }
@@ -53,7 +53,7 @@ namespace Biggy.SqlCe.Tests {
   }
 
   class ClientDocument {
-    [PrimaryKey]
+	[PrimaryKey(true)]
     public int ClientDocumentId { get; set; }
     public string LastName { get; set; }
     public string FirstName { get; set; }

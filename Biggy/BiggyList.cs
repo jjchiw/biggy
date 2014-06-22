@@ -2,7 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+#if !PCL
 using Biggy.Extensions;
+#endif
 
 namespace Biggy {
   public class BiggyList<T> : IBiggy<T> where T : new() {
@@ -28,11 +31,12 @@ namespace Biggy {
     }
     
     public BiggyList(IBiggyStore<T> store, bool inMemory = false) {
-      _store = store;     
+      _store = store;
       _items = (_store != null) ? _store.Load() : new List<T>();
       this.InMemory = inMemory;
     }
 
+	#if !PCL
     public BiggyList(bool inMemory = false) {
 
       // Unless the in-memory flag is set, initialize with JSON store:
@@ -42,6 +46,22 @@ namespace Biggy {
       _items = (_store != null) ? _store.Load() : new List<T>();
       this.InMemory = inMemory;
     }
+	#endif
+
+
+	#if PCL
+	public async Task<bool> LoadItemsAsync()
+	{
+		_items = await _store.LoadAsync();
+		return true;
+	}
+
+	public bool LoadItems()
+	{
+		_items =_store.Load();
+		return true;
+	}
+	#endif
 
     public virtual IEnumerator<T> GetEnumerator() {
       return _items.GetEnumerator();

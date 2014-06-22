@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <metadata>
+        <id>Biggy.Mobile</id>
+        <version>0.1.0</version>
+        <authors>-</authors>
+        <owners>-</owners>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Description</description>
+        <releaseNotes>Pcl libraries</releaseNotes>
+        <dependencies>
+            <dependency id="Humanizer" version="1.27.0" />
+            <dependency id="Newtonsoft.Json" version="6.0.3" />
+        </dependencies>
+    </metadata>
+	<files>
+		<file src="..\Biggy.Mobile.Droid\bin\Release\Biggy.Mobile.Droid.dll" target="lib\MonoAndroid44\Biggy.Mobile.Droid.dll" />
+		<file src="..\Biggy.Mobile.Droid\bin\Release\Biggy.Mobile.dll" target="lib\MonoAndroid44\Biggy.Mobile.dll" />
+		<file src="..\Biggy.Mobile.WP8\bin\Release\Biggy.Mobile.WP8.dll" target="lib\wp80\Biggy.Mobile.WP8.dll" />
+		<file src="..\Biggy.Mobile.WP8\bin\Release\Biggy.Mobile.dll" target="lib\wp80\Biggy.Mobile.dll" />
+	</files>
+</package>

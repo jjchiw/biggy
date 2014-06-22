@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="sku"
+        local:MvxBind="Text Sku" />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="name"
+        local:MvxBind="Text Name" />
+    <EditText
+        android:inputType="numberDecimal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="price"
+        local:MvxBind="Text Price" />
+    <Button
+        android:text="Add/Update"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        local:MvxBind="Click AddCommand" />
+    <Mvx.MvxListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        local:MvxBind="ItemsSource List"
+        local:MvxItemTemplate="@layout/product_item_template" />
+</LinearLayout>

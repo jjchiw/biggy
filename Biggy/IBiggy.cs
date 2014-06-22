@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Biggy
 {
@@ -14,6 +15,11 @@ namespace Biggy
         T Add(T item);
         IList<T> Add(List<T> items);
         bool InMemory { get; set; }
+
+		#if PCL
+		bool LoadItems ();
+		Task<bool> LoadItemsAsync ();
+		#endif
 
         event EventHandler<BiggyEventArgs<T>> ItemRemoved;
         event EventHandler<BiggyEventArgs<T>> ItemAdded;

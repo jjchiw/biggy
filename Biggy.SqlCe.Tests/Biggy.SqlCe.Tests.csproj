@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -65,11 +65,11 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Biggy.SqlCe\Biggy.SqlCe.csproj">
-      <Project>{fa40cbb1-31f3-447c-9154-ee373681b4e6}</Project>
+      <Project>{FA40CBB1-31F3-447C-9154-EE373681B4E6}</Project>
       <Name>Biggy.SqlCe</Name>
     </ProjectReference>
     <ProjectReference Include="..\Biggy\Biggy.csproj">
-      <Project>{49dbd996-032d-4b58-b35a-2621da0eaeaf}</Project>
+      <Project>{49DBD996-032D-4B58-B35A-2621DA0EAEAF}</Project>
       <Name>Biggy</Name>
     </ProjectReference>
   </ItemGroup>

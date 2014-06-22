@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace Biggy.JSON
 {
-  internal class BiggyListSerializer : JsonConverter
+  public class BiggyListSerializer : JsonConverter
   {
 
     public override bool CanConvert(System.Type objectType)
